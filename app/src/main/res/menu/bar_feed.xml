@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:title="Add Event"
+        android:id="@+id/feed_add"
+        android:orderInCategory="100"
+        android:icon="@drawable/add_event"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction"
+        />
+    <item
+        android:title="Profile"
+        android:id="@+id/feed_profile"
+        android:orderInCategory="100"
+        android:icon="@drawable/account_default_icon"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction"
+        />
+</menu>

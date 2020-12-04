@@ -1,9 +1,10 @@
 package pt.ubi.di.pdm.happeningubi;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class EventClass {
+public class EventClass implements Serializable {
 
     private String name, description, location, user;
     private ArrayList<Integer> images, going, interested;
