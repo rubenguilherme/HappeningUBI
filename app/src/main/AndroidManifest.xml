@@ -10,15 +10,15 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.HappeningUBI">
-        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".RegistoActivity"></activity>
+        <activity android:name=".LoginActivity" />
         <activity
             android:name=".AddEventActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".ProfileActivity" />
         <activity
             android:name=".FeedActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
         <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
