@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DefinicoesActivity"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/feed_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:menu="@menu/bar_feed"
+        tools:ignore="MissingConstraints" >
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/happ2"
+            />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/conta_settings_textview"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:background="#E3E3E3"
+        android:text="  A MINHA CONTA"
+        android:textColor="#4CAF50"
+        android:textSize="16dp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="113dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/conectar_facebook_definicoes_textview"
+                android:layout_width="match_parent"
+                android:layout_height="27dp"
+                android:text="      Conectar pelo Facebook"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+
+            <TextView
+                android:id="@+id/conectar_google_definicoes_textview"
+                android:layout_width="match_parent"
+                android:layout_height="27dp"
+                android:text="      Conectar pelo Google"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+
+            <TextView
+                android:id="@+id/mudar_foto_definicoes_textview"
+                android:layout_width="match_parent"
+                android:layout_height="27dp"
+                android:text="      Mudar foto de perfil"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+
+            <TextView
+                android:id="@+id/mudar_idioma_definicoes_textview"
+                android:layout_width="match_parent"
+                android:layout_height="27dp"
+                android:text="      Idioma"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/problema_settings_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#E3E3E3"
+        android:text="  FEEDBACK"
+        android:textColor="#4CAF50"
+        android:textSize="16dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="102dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/reportar_problema_definicoes_textview"
+                android:layout_width="match_parent"
+                android:layout_height="27dp"
+                android:text="      Reportar um problema"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
