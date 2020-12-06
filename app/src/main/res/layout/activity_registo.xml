@@ -49,7 +49,7 @@
         app:layout_constraintTop_toBottomOf="@+id/topview"
         android:background="@drawable/ic_wave"/>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="0dp"
         android:layout_height="70dp"
@@ -61,7 +61,7 @@
         app:layout_constraintTop_toBottomOf="@+id/wave_view">
 
         <EditText
-            android:id="@+id/nome"
+            android:id="@+id/username"
             android:layout_width="154dp"
             android:layout_height="50dp"
             android:layout_marginTop="16dp"
@@ -70,36 +70,14 @@
             android:background="@drawable/border"
             android:drawablePadding="16dp"
             android:ems="10"
-            android:hint="Nome"
+            android:hint="Username"
             android:inputType="textPersonName"
             android:padding="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/sobrenome"
-            android:layout_width="154dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:layout_weight="1"
-            android:background="@drawable/border"
-            android:drawablePadding="16dp"
-            android:ems="10"
-            android:hint="Sobrenome"
-            android:inputType="textPersonName"
-            android:padding="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/nome"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:drawableStart="@drawable/ic_person"
+ />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -154,6 +132,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout5"
         android:layout_width="0dp"
         android:layout_height="70dp"
         android:layout_marginStart="32dp"
@@ -177,6 +156,23 @@
             android:paddingStart="15dp" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/login_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/border_button"
+
+        android:onClick="toFeed"
+        android:text="REGISTAR"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
