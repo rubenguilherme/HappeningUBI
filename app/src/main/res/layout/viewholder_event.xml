@@ -44,6 +44,17 @@
         android:textStyle="bold"
         android:paddingLeft="8dp"/>
 
+    <TextView
+        android:id="@+id/feedRV_event_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:text="localização"
+        android:textSize="15sp"
+        android:textColor="@color/dark_grey"
+        android:paddingLeft="8dp"/>
+
     <ImageView
         android:id="@+id/feedRV_event_image"
         android:layout_width="wrap_content"

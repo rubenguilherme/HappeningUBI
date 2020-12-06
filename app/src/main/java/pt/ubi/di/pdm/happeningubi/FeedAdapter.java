@@ -1,7 +1,6 @@
 package pt.ubi.di.pdm.happeningubi;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyViewHolder> 
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view  = inflater.inflate(R.layout.viewholder_feed,parent,false);
+        View view  = inflater.inflate(R.layout.viewholder_event,parent,false);
         return new MyViewHolder(view);
     }
 
@@ -38,6 +37,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyViewHolder> 
         holder.userName.setText(e.getUser());
         holder.eventName.setText(e.getName());
         holder.eventDesc.setText(e.getDescription());
+        holder.eventLoc.setText(e.getLocation());
         holder.eventImage.setImageResource(R.drawable.bifana);
         if (position % 2 == 0) holder.eventImage.setVisibility(View.GONE);
     }
@@ -50,7 +50,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyViewHolder> 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         ImageView userImage, eventImage;
-        TextView userName,eventName,eventDesc;
+        TextView userName,eventName,eventDesc,eventLoc;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -59,6 +59,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyViewHolder> 
             eventName = itemView.findViewById(R.id.feedRV_event_name);
             eventDesc = itemView.findViewById(R.id.feedRV_event_desc);
             eventImage = itemView.findViewById(R.id.feedRV_event_image);
+            eventLoc = itemView.findViewById(R.id.feedRV_event_location);
         }
     }
 }

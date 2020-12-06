@@ -6,8 +6,8 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
+    <color name="dark_grey">#353535</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="dark_blue">#10244e</color>
     <color name="ubi_blue">#1c304f</color>
     <color name="corUBI">#0C2340</color>
 </resources>

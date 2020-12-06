@@ -19,4 +19,9 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    public void toRegisto(View view) {        //Ao clicar em qualquer sítio do ecrã, passa para a próxima atividade, ou seja, para a página para efetuar o registo
+        Intent intent = new Intent(LoginActivity.this, RegistoActivity.class);
+        startActivity(intent);
+    }
 }
