@@ -52,6 +52,7 @@ public class FeedActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.feed_profile:
                 Intent intent = new Intent(this, ProfileActivity.class);
+                intent.putExtra("events",events);
                 startActivity(intent);
                 break;
             case R.id.feed_add:

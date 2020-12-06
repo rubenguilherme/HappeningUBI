@@ -45,10 +45,9 @@ public class AddEventActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        Log.v("ERRORCATCHER","ola");
         new AlertDialog.Builder(this)
-                .setTitle("Complete Planning")
-                .setMessage("Are you sure you want to play with this board?")
+                .setTitle("Add Event")
+                .setMessage("Are you sure you want to post this event?")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         eventAdded();
