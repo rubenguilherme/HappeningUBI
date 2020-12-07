@@ -2,6 +2,7 @@ package pt.ubi.di.pdm.happeningubi;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.os.Bundle;
@@ -26,6 +27,10 @@ public class DefinicoesActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_definicoes);
+
+        Toolbar oToolBar = (Toolbar) findViewById(R.id.profile_bar);
+        setSupportActionBar(oToolBar);
+        //getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         Idioma = (TextView) findViewById(R.id.mudar_idioma_definicoes_textview);
         Mudar_Foto = (TextView) findViewById(R.id.mudar_foto_definicoes_textview);
@@ -72,14 +77,16 @@ public class DefinicoesActivity extends AppCompatActivity implements View.OnClic
         dialog.show();
         Enviar.setOnClickListener(v -> {
 
-            String Assunto,Descricao,Utilizador;
+            String Assunto,Descricao;
             Assunto = Assunto_Problema.getText().toString();
             Descricao = Descricao_Problema.getText().toString();
 
-            //Utilizador???
+            //Saber o nome do utilizador que deu o feedback?
 
             //inserir base de dados
 
+
+            //
             Toast.makeText(DefinicoesActivity.this,"Enviado com sucesso",Toast.LENGTH_SHORT).show(); //em caso de sucesso
 
         });

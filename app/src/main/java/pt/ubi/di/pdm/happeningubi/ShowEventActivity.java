@@ -2,6 +2,7 @@ package pt.ubi.di.pdm.happeningubi;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.media.Image;
 import android.os.Bundle;
@@ -27,10 +28,14 @@ public class ShowEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_event);
 
+        Toolbar oToolBar = (Toolbar) findViewById(R.id.profile_bar);
+        setSupportActionBar(oToolBar);
+        //getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         Descricao = (TextView) findViewById(R.id.descricao_evento_textview);
         edit_descricao = (ImageView) findViewById(R.id.edit_descricao_imageview);
-
         edit_descricao.setOnClickListener(v -> createPopup());
+
     }
     private void createPopup(){
         dialogbuilder = new AlertDialog.Builder(this);

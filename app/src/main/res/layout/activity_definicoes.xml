@@ -31,9 +31,9 @@
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:background="#E3E3E3"
-        android:text="  A MINHA CONTA"
+        android:text="          A MINHA CONTA"
         android:textColor="#4CAF50"
-        android:textSize="16dp"/>
+        android:textSize="16sp"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -52,7 +52,7 @@
                 android:layout_height="27dp"
                 android:text="      Conectar pelo Facebook"
                 android:textColor="@color/black"
-                android:textSize="16dp" />
+                android:textSize="16sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -65,7 +65,7 @@
                 android:layout_height="27dp"
                 android:text="      Conectar pelo Google"
                 android:textColor="@color/black"
-                android:textSize="16dp" />
+                android:textSize="16sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -78,7 +78,7 @@
                 android:layout_height="27dp"
                 android:text="      Mudar foto de perfil"
                 android:textColor="@color/black"
-                android:textSize="16dp" />
+                android:textSize="16sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -91,7 +91,7 @@
                 android:layout_height="27dp"
                 android:text="      Idioma"
                 android:textColor="@color/black"
-                android:textSize="16dp" />
+                android:textSize="16sp" />
 
         </LinearLayout>
     </ScrollView>
@@ -101,9 +101,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#E3E3E3"
-        android:text="  FEEDBACK"
+        android:text="          FEEDBACK"
         android:textColor="#4CAF50"
-        android:textSize="16dp" />
+        android:textSize="16sp" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -122,7 +122,7 @@
                 android:layout_height="27dp"
                 android:text="      Reportar um problema"
                 android:textColor="@color/black"
-                android:textSize="16dp" />
+                android:textSize="16sp" />
 
 
 
