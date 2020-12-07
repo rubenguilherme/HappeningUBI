@@ -9,7 +9,7 @@ public class EventClass implements Serializable {
     private String name, description, location, user;
     private ArrayList<Integer> images, going, interested;
     private Date date;
-    private int userID, likes, dislikes;
+    private int userID, likes, dislikes, eventID;
 
     public EventClass(String name, String description, String location, String user, ArrayList<Integer> images, Date date, int userID) {
         this.name = name;
