@@ -19,6 +19,8 @@
 
         <activity android:name=".RegistoActivity"></activity>
         <activity android:name=".LoginActivity" />
+        <activity android:name=".DefinicoesActivity" />
+        <activity android:name=".ShowEventActivity" />
         <activity
             android:name=".AddEventActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
