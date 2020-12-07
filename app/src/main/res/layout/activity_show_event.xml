@@ -141,7 +141,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.367"
         app:layout_constraintStart_toEndOf="@+id/descricao_evento_textview"
-        app:srcCompat="@drawable/Edit_Pen" />
+        app:srcCompat="@drawable/edit_pen" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
