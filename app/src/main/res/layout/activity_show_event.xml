@@ -36,7 +36,7 @@
         app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nome_evento_textview"
-        app:srcCompat="@drawable/image_not_found" />
+        app:srcCompat="@drawable/bifana" />
 
     <TextView
         android:id="@+id/nome_evento_textview"
@@ -106,6 +106,7 @@
         android:text="Interessados"
         android:textColor="@color/black"
         android:textSize="15dp"
+        app:layout_constraintLeft_toRightOf="@id/vao_evento_textview"
         app:layout_constraintTop_toBottomOf="@+id/imagem_aseguir_imageview"
         tools:layout_editor_absoluteX="197dp" />
 
