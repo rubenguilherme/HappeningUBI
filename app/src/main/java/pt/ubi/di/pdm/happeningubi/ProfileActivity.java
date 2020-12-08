@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,7 +32,7 @@ public class ProfileActivity extends AppCompatActivity {
         events = (ArrayList<EventClass>) iEvents.getSerializableExtra("events");
 
         recyclerView = findViewById(R.id.profile_recycler_view);
-        ProfileAdapter adapter = new ProfileAdapter(this, events);
+        EventAdapter adapter = new EventAdapter(this, events, EventAdapter.TYPE_PROFILE);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

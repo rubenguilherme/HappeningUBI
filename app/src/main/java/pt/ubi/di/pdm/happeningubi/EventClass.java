@@ -19,6 +19,8 @@ public class EventClass implements Serializable {
         this.images = images;
         this.date = date;
         this.userID = userID;
+        going = new ArrayList<>();
+        interested = new ArrayList<>();
     }
 
     public EventClass() {

@@ -3,9 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="pt.ubi.di.pdm.happeningubi">
 
-
-    <uses-permission android:name="android.permission.INTERNET"/>
-
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -15,9 +13,8 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.HappeningUBI">
-
-
-        <activity android:name=".RegistoActivity"></activity>
+        <activity android:name=".EventsCreatedActivity"></activity>
+        <activity android:name=".RegistoActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".DefinicoesActivity" />
         <activity android:name=".ShowEventActivity" />
@@ -27,7 +24,7 @@
         <activity android:name=".ProfileActivity" />
         <activity
             android:name=".FeedActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

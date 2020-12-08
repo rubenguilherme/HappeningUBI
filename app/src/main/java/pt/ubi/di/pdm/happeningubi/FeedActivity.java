@@ -18,7 +18,7 @@ public class FeedActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private ArrayList<EventClass> events;
-    private FeedAdapter adapter;
+    private EventAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +29,31 @@ public class FeedActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         events = new ArrayList<>();
+
+        //PARA TESTAR
         events.add(new EventClass("EVENTO1","DESCRICAO","COVILHA", "USER1", null, new Date(System.currentTimeMillis()), 1));
         events.add(new EventClass("EVENTO2","DESCRICAO","COVILHA", "USER1", null, new Date(System.currentTimeMillis()), 1));
         events.add(new EventClass("EVENTO3","DESCRICAO","COVILHA", "USER1", null, new Date(System.currentTimeMillis()), 1));
         events.add(new EventClass("EVENTO3","DESCRICAO","COVILHA", "USER1", null, new Date(System.currentTimeMillis()), 1));
         events.add(new EventClass("EVENTO3","DESCRICAO","COVILHA", "USER1", null, new Date(System.currentTimeMillis()), 1));
+        events.get(0).addGoing(50);
+        events.get(1).addGoing(60);
+        events.get(1).addGoing(60);
+        events.get(2).addGoing(70);
+        events.get(2).addGoing(70);
+        events.get(2).addGoing(70);
+        events.get(3).addGoing(80);
+        events.get(3).addGoing(80);
+        events.get(3).addGoing(80);
+        events.get(3).addGoing(80);
+        events.get(4).addGoing(90);
+        events.get(4).addGoing(90);
+        events.get(4).addGoing(90);
+        events.get(4).addGoing(90);
+        events.get(4).addGoing(90);
+
         recyclerView = findViewById(R.id.feed_recyclerView);
-        adapter = new FeedAdapter(this,events);
+        adapter = new EventAdapter(this,events, EventAdapter.TYPE_FEED);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
