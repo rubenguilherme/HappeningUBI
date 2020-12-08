@@ -14,9 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HappeningUBI">
         <activity android:name=".EventsCreatedActivity"></activity>
-        <activity android:name=".RegistoActivity" />
+        <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".DefinicoesActivity" />
+        <activity android:name=".SettingsActivity" />
         <activity android:name=".ShowEventActivity" />
         <activity
             android:name=".AddEventActivity"

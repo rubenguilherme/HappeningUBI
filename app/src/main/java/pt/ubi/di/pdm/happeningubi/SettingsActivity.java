@@ -3,7 +3,6 @@ package pt.ubi.di.pdm.happeningubi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.os.Bundle;
 import android.view.View;
@@ -12,9 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
-public class DefinicoesActivity extends AppCompatActivity implements View.OnClickListener {
+public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView Idioma,Mudar_Foto,Reportar_Problema,Conectar_Google,Conectar_Facebook;
 
@@ -87,7 +84,7 @@ public class DefinicoesActivity extends AppCompatActivity implements View.OnClic
 
 
             //
-            Toast.makeText(DefinicoesActivity.this,"Enviado com sucesso",Toast.LENGTH_SHORT).show(); //em caso de sucesso
+            Toast.makeText(SettingsActivity.this,"Enviado com sucesso",Toast.LENGTH_SHORT).show(); //em caso de sucesso
 
         });
         Cancelar.setOnClickListener(v -> dialog.dismiss());

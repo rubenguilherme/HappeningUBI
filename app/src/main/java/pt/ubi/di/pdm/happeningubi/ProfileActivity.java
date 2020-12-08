@@ -48,8 +48,8 @@ public class ProfileActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.profile_settings:
-                Toast t = Toast.makeText(this, "Funcionalidade ainda não implementada.", Toast.LENGTH_SHORT);
-                t.show();
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);
