@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -62,7 +63,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
                 break;
             case R.id.log_out_definicoes_textview:
-
+                Intent log_out = new Intent(SettingsActivity.this,LoginActivity.class);
+                startActivity(log_out);
+                finish();
                 break;
         }
 
