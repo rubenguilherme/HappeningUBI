@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
-    TextView Idioma,Mudar_Foto,Reportar_Problema,Conectar_Google,Conectar_Facebook;
+    TextView Idioma,Mudar_Foto,Reportar_Problema,Conectar_Google,Conectar_Facebook,LogOut;
 
     private EditText Assunto_Problema,Descricao_Problema;
     private AlertDialog.Builder dialogBuilder;
@@ -34,7 +34,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         Reportar_Problema = (TextView) findViewById(R.id.reportar_problema_definicoes_textview);
         Conectar_Facebook = (TextView) findViewById(R.id.conectar_facebook_definicoes_textview);
         Conectar_Google = (TextView) findViewById(R.id.conectar_google_definicoes_textview);
+        LogOut = (TextView) findViewById(R.id.log_out_definicoes_textview);
 
+        Reportar_Problema.setOnClickListener(this);
+        LogOut.setOnClickListener(this);
 
     }
 
@@ -56,6 +59,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
                 break;
             case R.id.conectar_google_definicoes_textview:
+
+                break;
+            case R.id.log_out_definicoes_textview:
 
                 break;
         }

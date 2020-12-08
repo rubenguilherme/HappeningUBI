@@ -37,7 +37,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="113dp"
+        android:layout_height="144dp"
         android:paddingTop="4dp"
         android:paddingBottom="4dp">
 
@@ -57,7 +57,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/darker_gray"/>
+                android:background="@android:color/darker_gray" />
 
             <TextView
                 android:id="@+id/conectar_google_definicoes_textview"
@@ -70,7 +70,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/darker_gray"/>
+                android:background="@android:color/darker_gray" />
 
             <TextView
                 android:id="@+id/mudar_foto_definicoes_textview"
@@ -83,7 +83,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/darker_gray"/>
+                android:background="@android:color/darker_gray" />
 
             <TextView
                 android:id="@+id/mudar_idioma_definicoes_textview"
@@ -92,6 +92,23 @@
                 android:text="      Idioma"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/log_out_definicoes_textview"
+                android:layout_width="match_parent"
+                android:layout_height="27dp"
+                android:text="      Log Out"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
 
         </LinearLayout>
     </ScrollView>
@@ -116,6 +133,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
+
             <TextView
                 android:id="@+id/reportar_problema_definicoes_textview"
                 android:layout_width="match_parent"
@@ -123,7 +145,10 @@
                 android:text="      Reportar um problema"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
 
 
         </LinearLayout>
