@@ -20,4 +20,7 @@
     <string name="editar">Editar</string>
     <string name="log_out">Log Out</string>
     <string name="feedback">FEEDBACK</string>
+    <string name="mudar_linguagem">Mudar Linguagem</string>
+    <string name="portugu_s">Português</string>
+    <string name="ingl_s">Inglês</string>
 </resources>
