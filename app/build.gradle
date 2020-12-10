@@ -3,6 +3,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('C:\\Users\\ruben\\AndroidStudioProjects\\HappeningUBI\\credentials\\release.keystore')
+            storePassword 'android'
+            keyAlias 'android'
+            keyPassword 'android'
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
 
@@ -14,6 +22,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.release
     }
 
     buildTypes {

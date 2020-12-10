@@ -71,8 +71,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
-
-
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
