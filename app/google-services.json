@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "305889671881",
+    "project_id": "happeningubi",
+    "storage_bucket": "happeningubi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:305889671881:android:66d6c373da3d1d6e7deb18",
+        "android_client_info": {
+          "package_name": "pt.ubi.di.pdm.happeningubi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "305889671881-4tc2u77nrjrlst87lgjloslbs1bbul1l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pt.ubi.di.pdm.happeningubi",
+            "certificate_hash": "510b0763f5b77180e84ee34ba68faf23aa8472f2"
+          }
+        },
+        {
+          "client_id": "305889671881-6a2vqd0m2g9p7j8i36kraeg2r0grfog8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEhSp2gJUImZMYijJX8yCxHiHervEAJKU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "305889671881-6a2vqd0m2g9p7j8i36kraeg2r0grfog8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
