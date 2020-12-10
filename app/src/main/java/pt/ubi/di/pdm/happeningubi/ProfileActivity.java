@@ -7,13 +7,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -35,7 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
         EventAdapter adapter = new EventAdapter(this, events, EventAdapter.TYPE_PROFILE);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        //setAppLocale("applanguage"); Gonçalo -> Mudar Idioma -> NAO APAGAR
     }
 
     @Override
@@ -58,5 +62,12 @@ public class ProfileActivity extends AppCompatActivity {
     public void goBack(View view) {
         setResult(RESULT_CANCELED);
         super.finish();
+    }
+    private void setAppLocale(String localeCode){ //Gonçalo -> Mudar Idioma -> NAO APAGAR
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.setLocale(new Locale(localeCode.toLowerCase()));
+        res.updateConfiguration(conf,dm);
     }
 }

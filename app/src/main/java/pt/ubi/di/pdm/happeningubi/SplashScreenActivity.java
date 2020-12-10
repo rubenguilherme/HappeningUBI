@@ -3,7 +3,10 @@ package pt.ubi.di.pdm.happeningubi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -11,6 +14,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 

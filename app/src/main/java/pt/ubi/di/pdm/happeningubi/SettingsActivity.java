@@ -7,7 +7,10 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +19,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
@@ -126,7 +131,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         alertDialogBuilder.setSingleChoiceItems(languages, 0, (dialog, which) -> {
             int selectedItem = which;
             //change language block
-
+            switch (selectedItem){
+                case 0: setAppLocale("pt"); break;
+                case 1: setAppLocale("en"); break;
+            }
             //
             Toast.makeText(SettingsActivity.this,languages[selectedItem].toString(),Toast.LENGTH_SHORT).show();
             dialog.dismiss();
@@ -136,5 +144,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         alertDialog.show();
 
 
+    }
+    private void setAppLocale(String localeCode){
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.setLocale(new Locale(localeCode.toLowerCase()));
+        res.updateConfiguration(conf,dm);
     }
 }

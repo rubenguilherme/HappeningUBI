@@ -7,7 +7,10 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +20,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.Date;
+import java.util.Locale;
 
 public class AddEventActivity extends AppCompatActivity {
 
@@ -35,6 +39,7 @@ public class AddEventActivity extends AppCompatActivity {
         editTDesc = findViewById(R.id.addevent_desc);
         editTLoc = findViewById(R.id.addevent_loc);
         datePicker = findViewById(R.id.addevent_date);
+        //setAppLocale("applanguage"); Gonçalo -> Mudar Idioma -> NAO APAGAR
     }
 
     @Override
@@ -73,5 +78,13 @@ public class AddEventActivity extends AppCompatActivity {
 
     public void toDo(View view) {
         Toast.makeText(this, "Funcionalidade ainda não implementada.", Toast.LENGTH_SHORT).show();
+    }
+
+    private void setAppLocale(String localeCode){ //Gonçalo -> Mudar Idioma -> NAO APAGAR
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.setLocale(new Locale(localeCode.toLowerCase()));
+        res.updateConfiguration(conf,dm);
     }
 }

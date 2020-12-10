@@ -4,8 +4,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.media.Image;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -13,6 +16,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Locale;
 
 public class ShowEventActivity extends AppCompatActivity {
 
@@ -35,6 +40,7 @@ public class ShowEventActivity extends AppCompatActivity {
         Descricao = (TextView) findViewById(R.id.descricao_evento_textview);
         edit_descricao = (ImageView) findViewById(R.id.edit_descricao_imageview);
         edit_descricao.setOnClickListener(v -> createPopup());
+        //setAppLocale("applanguage");
 
     }
     private void createPopup(){
@@ -52,5 +58,12 @@ public class ShowEventActivity extends AppCompatActivity {
         });
         Cancelar.setOnClickListener(v -> dialog.dismiss());
 
+    }
+    private void setAppLocale(String localeCode){
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.setLocale(new Locale(localeCode.toLowerCase()));
+        res.updateConfiguration(conf,dm);
     }
 }
