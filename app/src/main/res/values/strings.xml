@@ -24,4 +24,16 @@
     <string name="portugu_s">Português</string>
     <string name="ingl_s">Inglês</string>
     <string name="novo_evento">Novo Evento</string>
+    <string name="eventos_criados">Eventos Criados</string>
+    <string name="vou">Vou</string>
+    <string name="interessado">Interessado</string>
+    <string name="cria_agora_a_tua_conta_e_mant_m_te_atualizado">Cria agora a tua conta e mantém-te atualizado</string>
+    <string name="s_novo_aqui_regista_te_agora">És novo aqui? Regista-te agora.</string>
+    <string name="event_name">Event Name</string>
+    <string name="event_description">Event Description</string>
+    <string name="event_location">Event Location</string>
+    <string name="add_video">Add Video</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="see_what_s_happening_in_ubi_right_now">See what\'s \'\'Happening\'\' in UBI right now.</string>
+    <string name="ou">OU</string>
 </resources>

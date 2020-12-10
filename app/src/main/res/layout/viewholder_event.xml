@@ -118,7 +118,7 @@
                 android:id="@+id/event_add_going"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Vou"
+                android:text="@string/vou"
                 android:layout_gravity="center"/>
 
             <Button
@@ -126,7 +126,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Interessado"/>
+                android:text="@string/interessado"/>
 
         </LinearLayout>
 

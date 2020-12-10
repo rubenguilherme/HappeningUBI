@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="35dp"
-        android:text="Cria agora a tua conta e mantém-te atualizado"
+        android:text="@string/cria_agora_a_tua_conta_e_mant_m_te_atualizado"
         android:textColor="@color/white"
         android:textSize="26sp"
         android:textStyle="bold"
