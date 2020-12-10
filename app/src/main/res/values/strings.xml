@@ -1,4 +1,26 @@
 <resources>
     <string name="app_name">Happening@UBI</string>
-
+    <string name="a_minha_conta">A MINHA CONTA</string>
+    <string name="conectar_pelo_facebook">Conectar pelo Facebook</string>
+    <string name="conectar_pelo_google">Conectar pelo Google</string>
+    <string name="mudar_foto_de_perfil">Mudar foto de perfil</string>
+    <string name="idioma">Idioma</string>
+    <string name="reportar_um_problema">Reportar um problema</string>
+    <string name="reportar_problema">Reportar Problema</string>
+    <string name="assunto">Assunto</string>
+    <string name="descri_o">Descrição</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="enviar">Enviar</string>
+    <string name="nome_do_evento">Nome do Evento</string>
+    <string name="v_o_ao_evento">Vão ao evento</string>
+    <string name="interessados">Interessados</string>
+    <string name="descri_o_do_evento">Descrição do evento</string>
+    <string name="editar_descri_o">Editar Descrição</string>
+    <string name="nova_descri_o">Nova Descrição</string>
+    <string name="editar">Editar</string>
+    <string name="log_out">Log Out</string>
+    <string name="feedback">FEEDBACK</string>
+    <string name="mudar_linguagem">Mudar Linguagem</string>
+    <string name="portugu_s">Português</string>
+    <string name="ingl_s">Inglês</string>
 </resources>

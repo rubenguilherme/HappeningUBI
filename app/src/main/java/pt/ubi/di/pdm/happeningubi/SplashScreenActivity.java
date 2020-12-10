@@ -11,6 +11,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class SplashScreenActivity extends AppCompatActivity {
 
     ImageView logo;
@@ -34,11 +37,13 @@ public class SplashScreenActivity extends AppCompatActivity {
         logo.setAnimation(top);
         teamName.setAnimation(bottom);
 
+        new Timer().schedule(new TimerTask(){
+            @Override
+            public void run(){
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            }
+        }, 3000);
+
     }
 
-    public void screenTapped(View view) {        //Ao clicar em qualquer sítio do ecrã, passa para a próxima atividade, ou seja, para a página de login
-        Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
-        startActivity(intent);
-        finish();
-    }
 }
