@@ -31,13 +31,13 @@
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:background="#E3E3E3"
-        android:text="          A MINHA CONTA"
+        android:text="@string/a_minha_conta"
         android:textColor="#4CAF50"
         android:textSize="16sp"/>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="113dp"
+        android:layout_height="wrap_content"
         android:paddingTop="4dp"
         android:paddingBottom="4dp">
 
@@ -49,65 +49,93 @@
             <TextView
                 android:id="@+id/conectar_facebook_definicoes_textview"
                 android:layout_width="match_parent"
-                android:layout_height="27dp"
-                android:text="      Conectar pelo Facebook"
+                android:layout_height="30dp"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/conectar_pelo_facebook"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/darker_gray"/>
+                android:background="@android:color/darker_gray" />
 
             <TextView
                 android:id="@+id/conectar_google_definicoes_textview"
                 android:layout_width="match_parent"
-                android:layout_height="27dp"
-                android:text="      Conectar pelo Google"
+                android:layout_height="30dp"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/conectar_pelo_google"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/darker_gray"/>
+                android:background="@android:color/darker_gray" />
 
             <TextView
                 android:id="@+id/mudar_foto_definicoes_textview"
                 android:layout_width="match_parent"
-                android:layout_height="27dp"
-                android:text="      Mudar foto de perfil"
+                android:layout_height="30dp"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/mudar_foto_de_perfil"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/darker_gray"/>
+                android:background="@android:color/darker_gray" />
 
             <TextView
                 android:id="@+id/mudar_idioma_definicoes_textview"
                 android:layout_width="match_parent"
-                android:layout_height="27dp"
-                android:text="      Idioma"
+                android:layout_height="30dp"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/idioma"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/log_out_definicoes_textview"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/log_out"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/problema_settings_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#E3E3E3"
+                android:text="@string/feedback"
+                android:textColor="#4CAF50"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
 
         </LinearLayout>
     </ScrollView>
 
-    <TextView
-        android:id="@+id/problema_settings_textview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#E3E3E3"
-        android:text="          FEEDBACK"
-        android:textColor="#4CAF50"
-        android:textSize="16sp" />
-
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="102dp"
+        android:layout_height="wrap_content"
         android:paddingTop="4dp"
         android:paddingBottom="4dp">
 
@@ -119,11 +147,17 @@
             <TextView
                 android:id="@+id/reportar_problema_definicoes_textview"
                 android:layout_width="match_parent"
-                android:layout_height="27dp"
-                android:text="      Reportar um problema"
+                android:layout_height="30dp"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/reportar_um_problema"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
 
 
         </LinearLayout>
