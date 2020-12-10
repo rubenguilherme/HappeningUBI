@@ -5,7 +5,7 @@ plugins {
 android {
     signingConfigs {
         release {
-            storeFile file('C:\\Users\\ruben\\AndroidStudioProjects\\HappeningUBI\\credentials\\release.keystore')
+            storeFile file('..\\credentials\\release.keystore')
             storePassword 'android'
             keyAlias 'android'
             keyPassword 'android'
