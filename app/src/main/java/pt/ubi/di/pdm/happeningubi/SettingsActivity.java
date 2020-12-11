@@ -10,18 +10,33 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+
 import java.util.Locale;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
+
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -31,6 +46,11 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
     private Button Send,Cancel;
+    private ImageView Back;
+
+    private FirebaseAuth mAuth;
+
+    private boolean isRefreshing = true;
 
     CharSequence[] languages = {"Português","English"};
 
@@ -40,58 +60,54 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_definicoes);
 
-        Toolbar oToolBar = (Toolbar) findViewById(R.id.profile_bar);
+        Toolbar oToolBar = (Toolbar) findViewById(R.id.settings_bar);
         setSupportActionBar(oToolBar);
-        //getSupportActionBar().setDisplayShowTitleEnabled(false);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
+        mAuth = FirebaseAuth.getInstance();
+        Back = (ImageView) findViewById(R.id.settings_back);
         Language = (TextView) findViewById(R.id.mudar_idioma_definicoes_textview);
-        Change_Foto = (TextView) findViewById(R.id.mudar_foto_definicoes_textview);
         Report_Problem = (TextView) findViewById(R.id.reportar_problema_definicoes_textview);
-        Connect_Facebook = (TextView) findViewById(R.id.conectar_facebook_definicoes_textview);
         Connect_Google = (TextView) findViewById(R.id.conectar_google_definicoes_textview);
         LogOut = (TextView) findViewById(R.id.log_out_definicoes_textview);
 
         Report_Problem.setOnClickListener(this);
         LogOut.setOnClickListener(this);
         Language.setOnClickListener(this);
+        Back.setOnClickListener(this);
 
     }
     @Override
     public void onClick(View v) {
 
         switch(v.getId()){
-
-            case R.id.mudar_foto_definicoes_textview:
-
-                break;
             case R.id.reportar_problema_definicoes_textview: //popup com "assunto" e "mensagem"
                 createReport();
                 break;
             case R.id.mudar_idioma_definicoes_textview: // mudar as strings
+                isRefreshing = true;
                 createPopUp();
-                break;
-            case R.id.conectar_facebook_definicoes_textview:
-
+                isRefreshing = false;
                 break;
             case R.id.conectar_google_definicoes_textview:
 
                 break;
             case R.id.log_out_definicoes_textview:
-                Intent log_out = new Intent(SettingsActivity.this,LoginActivity.class);
-                startActivity(log_out);
+                mAuth.signOut();
+                Intent intent = new Intent(SettingsActivity.this,LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                Toast.makeText(SettingsActivity.this, "Logout", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.settings_back:
+                Intent back = new Intent(SettingsActivity.this,ProfileActivity.class);
+                startActivity(back);
                 finish();
                 break;
-            //clicar no user
-
-            //break;
-
-            //clicar no add event
-
-
-            //break;
         }
 
     }
+
     private void createReport(){
         dialogBuilder = new AlertDialog.Builder(this);
         final View ReportPopupView = getLayoutInflater().inflate(R.layout.popup_reportproblem,null);
@@ -127,7 +143,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         //else
         //  alertDialogBuilder.setTitle("Seleciona a Linguagem");
         alertDialogBuilder.setCancelable(true);
-        // 0 = first element -> default _ mudar para a language do momento
+        // 0 = first element -> default _ mudar para a linguagem do user
         alertDialogBuilder.setSingleChoiceItems(languages, 0, (dialog, which) -> {
             int selectedItem = which;
             //change language block
@@ -135,6 +151,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 case 0: setAppLocale("pt"); break;
                 case 1: setAppLocale("en"); break;
             }
+            restart();
             //
             Toast.makeText(SettingsActivity.this,languages[selectedItem].toString(),Toast.LENGTH_SHORT).show();
             dialog.dismiss();
@@ -152,4 +169,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         conf.setLocale(new Locale(localeCode.toLowerCase()));
         res.updateConfiguration(conf,dm);
     }
+    private void restart(){
+        Intent intent = new Intent(SettingsActivity.this,SettingsActivity.class);
+        finish();
+        overridePendingTransition(0,0);
+        startActivity(intent);
+        overridePendingTransition(0,0);
+    }
+
 }
