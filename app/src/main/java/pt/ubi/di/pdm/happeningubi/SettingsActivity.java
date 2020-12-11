@@ -5,12 +5,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
@@ -24,6 +26,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -46,6 +54,11 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
     private Button Send,Cancel;
+            //google
+    SignInButton btnGoogle;
+    private static int RC_SIGN_IN = 101;
+
+    GoogleSignInClient mGoogleSignInClient;
     private ImageView Back;
 
     private FirebaseAuth mAuth;
@@ -65,22 +78,34 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
         mAuth = FirebaseAuth.getInstance();
+        btnGoogle = findViewById(R.id.sign_in_button_settings);
         Back = (ImageView) findViewById(R.id.settings_back);
         Language = (TextView) findViewById(R.id.mudar_idioma_definicoes_textview);
         Report_Problem = (TextView) findViewById(R.id.reportar_problema_definicoes_textview);
-        Connect_Google = (TextView) findViewById(R.id.conectar_google_definicoes_textview);
         LogOut = (TextView) findViewById(R.id.log_out_definicoes_textview);
 
         Report_Problem.setOnClickListener(this);
         LogOut.setOnClickListener(this);
         Language.setOnClickListener(this);
         Back.setOnClickListener(this);
+        btnGoogle.setOnClickListener(v -> signIn());
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(SettingsActivity.this, gso);
 
     }
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
 
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.reportar_problema_definicoes_textview: //popup com "assunto" e "mensagem"
                 createReport();
                 break;
@@ -89,23 +114,56 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 createPopUp();
                 isRefreshing = false;
                 break;
-            case R.id.conectar_google_definicoes_textview:
-
-                break;
             case R.id.log_out_definicoes_textview:
                 mAuth.signOut();
-                Intent intent = new Intent(SettingsActivity.this,LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 Toast.makeText(SettingsActivity.this, "Logout", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.settings_back:
-                Intent back = new Intent(SettingsActivity.this,ProfileActivity.class);
+                Intent back = new Intent(SettingsActivity.this, ProfileActivity.class);
                 startActivity(back);
                 finish();
                 break;
         }
 
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                assert account != null;
+                firebaseAuthWithGoogle(account.getIdToken());
+            } catch (ApiException e) {
+                // Google Sign In failed, update UI appropriately
+                Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+                // ...
+            }
+        }
+    }
+
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        assert user != null;
+                        Toast.makeText(SettingsActivity.this, user.getEmail()+"\n" + user.getDisplayName(), Toast.LENGTH_SHORT).show();
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Toast.makeText(SettingsActivity.this, Objects.requireNonNull(task.getException()).toString() , Toast.LENGTH_SHORT).show();
+                    }
+
+                    // ...
+                });
     }
 
     private void createReport(){
