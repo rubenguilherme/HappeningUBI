@@ -39,7 +39,6 @@ public class ProfileActivity extends AppCompatActivity {
         EventAdapter adapter = new EventAdapter(this, events, EventAdapter.TYPE_PROFILE);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //setAppLocale("applanguage"); Gonçalo -> Mudar Idioma -> NAO APAGAR
     }
 
     @Override
@@ -62,12 +61,5 @@ public class ProfileActivity extends AppCompatActivity {
     public void goBack(View view) {
         setResult(RESULT_CANCELED);
         super.finish();
-    }
-    private void setAppLocale(String localeCode){ //Gonçalo -> Mudar Idioma -> NAO APAGAR
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.setLocale(new Locale(localeCode.toLowerCase()));
-        res.updateConfiguration(conf,dm);
     }
 }

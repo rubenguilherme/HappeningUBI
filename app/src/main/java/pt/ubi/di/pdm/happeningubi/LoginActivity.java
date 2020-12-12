@@ -53,7 +53,6 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         mAuth = FirebaseAuth.getInstance();
-        //setAppLocale("applanguage"); Gonçalo -> Mudar Idioma -> NAO APAGAR
     }
 
 
@@ -117,12 +116,5 @@ public class LoginActivity extends AppCompatActivity {
     public void toRegisto(View view) {        //Ao clicar em qualquer sítio do ecrã, passa para a próxima atividade, ou seja, para a página para efetuar o registo
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(intent);
-    }
-    private void setAppLocale(String localeCode){ //Gonçalo -> Mudar Idioma -> NAO APAGAR
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.setLocale(new Locale(localeCode.toLowerCase()));
-        res.updateConfiguration(conf,dm);
     }
 }

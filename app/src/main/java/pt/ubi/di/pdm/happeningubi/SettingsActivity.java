@@ -66,9 +66,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private ImageView Back;
 
     private FirebaseAuth mAuth;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private boolean isRefreshing = true;
-
+    private String docID;
     CharSequence[] languages = {"Português","English"};
 
     //id user
@@ -87,7 +88,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
         mAuth = FirebaseAuth.getInstance();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection("users")
                 .get()
@@ -97,6 +97,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
                             Long i = (Long)document.getData().get("id");
                             if(i.equals(userID)){
+                                docID = document.getId();
                                 language = (String) document.getData().get("language");
                                 language = Objects.requireNonNull(language).toLowerCase();
                             }
@@ -229,19 +230,20 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             lang = 1;
         }
         else{
-          alertDialogBuilder.setTitle("Seleciona a Linguagem");
-          lang = 0;
+            alertDialogBuilder.setTitle("Seleciona a Linguagem");
+            lang = 0;
         }
         alertDialogBuilder.setCancelable(true);
         alertDialogBuilder.setSingleChoiceItems(languages, lang, (dialog, which) -> {
             int selectedItem = which;
             //change language block
             switch (selectedItem){
-                case 0: setAppLocale("pt"); //set user language on data base
+                case 0: setAppLocale("pt"); //set   user language on data base
                         break;
                 case 1: setAppLocale("en"); //set user language on data base
                         break;
             }
+            db.collection("users").document(docID).update("language",language);
             restart();
             Toast.makeText(SettingsActivity.this,languages[selectedItem].toString(),Toast.LENGTH_SHORT).show();
             dialog.dismiss();
@@ -271,5 +273,4 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         Intent intent = new Intent(this,EditProfileActivity.class);
         startActivity(intent);
     }
-
 }

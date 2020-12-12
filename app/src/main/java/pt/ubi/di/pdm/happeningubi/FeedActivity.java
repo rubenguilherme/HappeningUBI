@@ -61,7 +61,6 @@ public class FeedActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        //setAppLocale("applanguage"); Gonçalo -> Mudar Idioma -> NAO APAGAR
 
     }
 
@@ -95,13 +94,5 @@ public class FeedActivity extends AppCompatActivity {
             events.add(e);
             adapter.notifyDataSetChanged();
         }
-    }
-
-    private void setAppLocale(String localeCode){ //Gonçalo -> Mudar Idioma -> NAO APAGAR
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.setLocale(new Locale(localeCode.toLowerCase()));
-        res.updateConfiguration(conf,dm);
     }
 }
