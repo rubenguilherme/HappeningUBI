@@ -31,7 +31,8 @@
             android:layout_gravity="end"
             android:layout_marginEnd="21dp"
             android:background="@null"
-            android:src="@drawable/ic_check_white" />
+            android:src="@drawable/ic_check_white"
+            android:onClick="confirmChanges" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -68,22 +69,7 @@
                 android:layout_marginBottom="25dp" />
 
             <TextView
-                android:id="@+id/username"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/username" />
-
-            <EditText
-                android:id="@+id/usernameET"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Username" />
-
-            <TextView
                 android:id="@+id/name"
-                android:layout_marginTop="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/name" />
@@ -94,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:text="Name" />
+                android:text="" />
 
             <TextView
                 android:id="@+id/changeEmail"
@@ -103,13 +89,25 @@
                 android:layout_height="wrap_content"
                 android:text="@string/email" />
 
-            <EditText
-                android:id="@+id/changeEmailET"
+            <TextView
+                android:id="@+id/changeEmailTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textEmailAddress"
-                android:text="Email" />
+                android:text="rpabarata@gmail.com"
+                android:textSize="18sp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+            <TextView
+                android:layout_marginTop="50dp"
+                android:id="@+id/changeEmailBTN"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/changeEmail"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/ubi_blue"
+                android:onClick="changeEmail"/>
 
             <TextView
                 android:layout_marginTop="20dp"
@@ -120,7 +118,20 @@
                 android:layout_gravity="center"
                 android:text="@string/changePass"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@color/ubi_blue" />
+                android:textColor="@color/ubi_blue"
+                android:onClick="changePass"/>
+
+            <TextView
+                android:layout_marginTop="20dp"
+                android:id="@+id/deleteAcc"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/deleteAcc"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="#F44336"
+                android:onClick="deleteAcc"/>
 
 
 

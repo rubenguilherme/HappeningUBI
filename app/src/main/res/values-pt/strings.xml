@@ -41,6 +41,9 @@
     <string name="username">Nome de Utilizador</string>
     <string name="name">Nome</string>
     <string name="email">Email</string>
-    <string name="changePass">Change Password</string>
+    <string name="changePass">Alterar Password</string>
+    <string name="pick_time">Definir hora</string>
+    <string name="deleteAcc">Apagar Conta</string>
+    <string name="changeEmail">Alterar Email</string>
 </resources>
 

@@ -42,4 +42,7 @@
     <string name="name">Name</string>
     <string name="email">Email</string>
     <string name="changePass">Change Password</string>
+    <string name="pick_time">Define hour</string>
+    <string name="deleteAcc">Delete Account</string>
+    <string name="changeEmail">Change Email</string>
 </resources>
