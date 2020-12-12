@@ -7,11 +7,11 @@ import java.util.Date;
 public class EventClass implements Serializable {
 
     private String name, description, location, user;
-    private ArrayList<Integer> images, going, interested;
+    private ArrayList<Long> images, going, interested;
     private Date date;
-    private int userID, likes, dislikes, eventID;
+    private long userID, likes, dislikes, eventID;
 
-    public EventClass(String name, String description, String location, String user, ArrayList<Integer> images, Date date, int userID) {
+    public EventClass(String name, String description, String location, String user, ArrayList<Long> images, Date date, long userID) {
         this.name = name;
         this.description = description;
         this.location = location;
@@ -59,39 +59,39 @@ public class EventClass implements Serializable {
         this.user = user;
     }
 
-    public ArrayList<Integer> getImages() {
+    public ArrayList<Long> getImages() {
         return images;
     }
 
-    public void setImages(ArrayList<Integer> images) {
+    public void setImages(ArrayList<Long> images) {
         this.images = images;
     }
 
-    public void addImage(int id) {
+    public void addImage(long id) {
         images.add(id);
     }
 
-    public ArrayList<Integer> getGoing() {
+    public ArrayList<Long> getGoing() {
         return going;
     }
 
-    public void setGoing(ArrayList<Integer> going) {
+    public void setGoing(ArrayList<Long> going) {
         this.going = going;
     }
 
-    public void addGoing(int id) {
+    public void addGoing(long id) {
         going.add(id);
     }
 
-    public ArrayList<Integer> getInterested() {
+    public ArrayList<Long> getInterested() {
         return interested;
     }
 
-    public void setInterested(ArrayList<Integer> interested) {
+    public void setInterested(ArrayList<Long> interested) {
         this.interested = interested;
     }
 
-    public void addInterested(int id) {
+    public void addInterested(long id) {
         interested.add(id);
     }
 
@@ -103,19 +103,19 @@ public class EventClass implements Serializable {
         this.date = date;
     }
 
-    public int getUserID() {
+    public long getUserID() {
         return userID;
     }
 
-    public void setUserID(int userID) {
+    public void setUserID(long userID) {
         this.userID = userID;
     }
 
-    public int getLikes() {
+    public long getLikes() {
         return likes;
     }
 
-    public void setLikes(int likes) {
+    public void setLikes(long likes) {
         this.likes = likes;
     }
 
@@ -127,11 +127,11 @@ public class EventClass implements Serializable {
         likes--;
     }
 
-    public int getDislikes() {
+    public long getDislikes() {
         return dislikes;
     }
 
-    public void setDislikes(int dislikes) {
+    public void setDislikes(long dislikes) {
         this.dislikes = dislikes;
     }
 
