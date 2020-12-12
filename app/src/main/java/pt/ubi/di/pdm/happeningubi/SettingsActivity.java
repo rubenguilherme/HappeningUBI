@@ -236,8 +236,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void goToChangeProfile(View v){
-        Intent intent = new Intent(SettingsActivity.this, EditProfileActivity.class);
-        startActivity(intent);
+        finish();
     }
 
 }
