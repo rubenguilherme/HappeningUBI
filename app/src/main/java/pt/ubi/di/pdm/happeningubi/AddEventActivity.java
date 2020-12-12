@@ -29,11 +29,17 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -49,20 +55,19 @@ import java.util.Map;
 
 public class AddEventActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
 
-    public static int id = 1;
-    public static int img_id = 1;
+    public static Long id;
+    public static Long img_id;
 
     EditText editTName, editTDesc, editTLoc;
-    ImageView ivImage;
     DatePicker datePicker;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
-    int hour, minute;
+    int hour, minute, flag = 0;
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
     ArrayList<Uri> files = new ArrayList<>();
-    ArrayList<Integer> id_files = new ArrayList<>();
+    ArrayList<Long> id_files = new ArrayList<>();
     boolean existFile = false;
 
     @Override
@@ -77,6 +82,24 @@ public class AddEventActivity extends AppCompatActivity implements TimePickerDia
         editTDesc = findViewById(R.id.addevent_desc);
         editTLoc = findViewById(R.id.addevent_loc);
         datePicker = findViewById(R.id.addevent_date);
+
+        db.collection("NextIDS")
+                .orderBy("events", Query.Direction.DESCENDING)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                id = (Long) document.getData().get("events");
+                                break;
+                            }
+                        } else {
+                            Log.w("TAG", "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+
         //ivImage = findViewById(R.id.ivImage);
         //setAppLocale("applanguage"); Gonçalo -> Mudar Idioma -> NAO APAGAR
 
@@ -135,7 +158,9 @@ public class AddEventActivity extends AppCompatActivity implements TimePickerDia
                 size++;
             }
         }
+        db.collection("NextIDS").document("wOf4zrNyF21HPlQiFPjJ").update("images", img_id);
         id++;
+        db.collection("NextIDS").document("wOf4zrNyF21HPlQiFPjJ").update("events", id);
         //EventClass e = new EventClass(editTName.getText().toString(),editTDesc.getText().toString(), editTLoc.getText().toString(),"USER100" , null, new Date(datePicker.getYear(),datePicker.getMonth(),datePicker.getDayOfMonth()),-1);
         //Intent result = new Intent();
         //result.putExtra("event", e);
@@ -155,6 +180,22 @@ public class AddEventActivity extends AppCompatActivity implements TimePickerDia
                 requestPermissions(permissions, PERMISSION_CODE);
             }
             else {
+                db.collection("NextIDS")
+                        .orderBy("images", Query.Direction.DESCENDING)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        img_id = (Long) document.getData().get("images") + flag;
+                                        break;
+                                    }
+                                } else {
+                                    Log.w("TAG", "Error getting documents.", task.getException());
+                                }
+                            }
+                        });
                 pickImageFromGallery();
             }
         }
@@ -176,6 +217,7 @@ public class AddEventActivity extends AppCompatActivity implements TimePickerDia
             existFile = true;
             id_files.add(img_id);
             img_id++;
+            flag++;
             //ivImage.setImageURI(img);
         }
     }
