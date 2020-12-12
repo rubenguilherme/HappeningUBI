@@ -54,6 +54,22 @@
                 android:layout_height="1dp"
                 android:background="@android:color/darker_gray" />
 
+            <TextView
+                android:id="@+id/edit_profile"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/edit_profile"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:onClick="goToChangeProfile"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
+
 
             <TextView
                 android:id="@+id/mudar_idioma_definicoes_textview"

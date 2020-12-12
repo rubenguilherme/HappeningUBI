@@ -36,5 +36,11 @@
     <string name="add_photo">Add Photo</string>
     <string name="see_what_s_happening_in_ubi_right_now">See what\'s \'\'Happening\'\' in UBI right now.</string>
     <string name="ou">OR</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="change_pic">Change Profile Photo</string>
+    <string name="username">Username</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="changePass">Change Password</string>
     <string name="pick_time">Define hour</string>
 </resources>
