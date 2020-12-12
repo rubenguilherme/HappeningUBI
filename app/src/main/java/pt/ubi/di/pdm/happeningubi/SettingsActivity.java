@@ -235,4 +235,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         overridePendingTransition(0,0);
     }
 
+    public void goToChangeProfile(View v){
+        Intent intent = new Intent(SettingsActivity.this, EditProfileActivity.class);
+        startActivity(intent);
+    }
+
 }
