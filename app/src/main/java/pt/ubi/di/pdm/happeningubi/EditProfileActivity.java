@@ -3,6 +3,8 @@ package pt.ubi.di.pdm.happeningubi;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,7 +18,10 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -47,7 +52,7 @@ public class EditProfileActivity extends AppCompatActivity {
         //read UserID from file(?)
         //example: -1
 
-        Long userID = -1l; //read from file
+        Long userID = -1L; //read from file
 
 
         db.collection("users")
@@ -84,23 +89,8 @@ public class EditProfileActivity extends AppCompatActivity {
     public void confirmChanges(View v){
 
         db.collection("users").document(docID).update("name", String.valueOf(name.getText()));
-        db.collection("users").document(docID).update("email", String.valueOf(email.getText()));
 
         finish();
-    }
-
-    public void changeEmail(View v){
-        //ON GOING - DON'T USE YEAT
-        FirebaseAuth.getInstance().getCurrentUser().updateEmail("user@example.com")
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "User email address updated.");
-                        }
-                    }
-                });
-
     }
 
     public void changePass(View v){
@@ -123,6 +113,7 @@ public class EditProfileActivity extends AppCompatActivity {
         startActivity(intent);
 
         db.collection("users").document(docID).delete();
+        FirebaseAuth.getInstance().getCurrentUser().delete();
 
     }
 
