@@ -4,14 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -21,22 +17,47 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.Locale;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends Util {
 
     SignInButton btnGoogle;
     GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
     private static int RC_SIGN_IN = 101;
+    private EditText email, password;
+    private static final String TAG = "LoginActivity";
+    private Long nextID;
+    private String emailS;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if(currentUser != null)
+            setCurrentUser(currentUser.getEmail());
+
+        updateUI(currentUser, false);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +65,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         btnGoogle = findViewById(R.id.sign_in_button);
+        email = findViewById(R.id.email_text);
+        password = findViewById(R.id.pass_input);
 
         btnGoogle.setOnClickListener(v -> signIn());
 
@@ -89,31 +112,147 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         assert user != null;
+                        addUserToDatabase(user.getEmail(), user.getDisplayName());
                         Toast.makeText(LoginActivity.this, user.getEmail()+ "\n" +user.getDisplayName(), Toast.LENGTH_SHORT).show();
-                        updateUI(user);
+                        updateUI(user, false);
                     } else {
                         // If sign in fails, display a message to the user.
                         Toast.makeText(LoginActivity.this, Objects.requireNonNull(task.getException()).toString() , Toast.LENGTH_SHORT).show();
-                        updateUI(null);
+                        updateUI(null, false);
                     }
 
                     // ...
                 });
     }
 
-    private void updateUI(FirebaseUser user) {
-        Intent intent= new Intent(LoginActivity.this, FeedActivity.class);
-        startActivity(intent);
+    private void addUserToDatabase(String email, String name) {
+
+        String username = email.split("@")[0];
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("NextIDS")
+                .orderBy("users", Query.Direction.DESCENDING)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(), "User created.", Toast.LENGTH_LONG).show();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                nextID = (Long) document.getData().get("users");
+
+                                Map<String, Object> user = new HashMap<>();
+                                user.put("email", email);
+                                user.put("id", nextID);
+                                user.put("language", "");
+                                user.put("name", name);
+                                user.put("profile_pic_id", -1L);
+                                user.put("username", username);
+
+                                writeUser(String.valueOf(nextID));
+
+                                // Add a new document with a generated ID
+                                db.collection("users")
+                                        .add(user)
+                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                            @Override
+                                            public void onSuccess(DocumentReference documentReference) {
+                                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.d(TAG, "Error adding document", e);
+                                            }
+                                        });
+
+                                //update table ID
+                                db.collection("NextIDS").document("wOf4zrNyF21HPlQiFPjJ").update("users", Long.valueOf(nextID + 1));
+
+                            }
+                        }
+                        else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+    }
+
+    private void updateUI(FirebaseUser user, boolean flag) {
+        if(user != null) {
+            Intent intent = new Intent(this, FeedActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        else {
+            if(flag){
+                email.setError("Check if email is correct");
+                password.setError("Check if password is correct");
+            }
+        }
     }
 
 
-    public void toFeed(View view) {        //Ao clicar em qualquer sítio do ecrã, passa para a próxima atividade, ou seja, para a página do feed
-        Intent intent = new Intent(LoginActivity.this, FeedActivity.class);
-        startActivity(intent);
-        finish();
+    public void toFeed(View view) {
+        emailS = email.getText().toString();
+        String passwordS = password.getText().toString();
+
+        if(emailS.equals("admin"))
+            emailS = "hubiadmin@gmail.com";
+
+        if((emailS != null && passwordS != null) && (!emailS.equals("") && !passwordS.equals(""))){
+            mAuth.signInWithEmailAndPassword(emailS.trim(), passwordS.trim())
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "signInWithEmail:success");
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                setCurrentUser(emailS);
+                                updateUI(user, true);
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                Toast.makeText(getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                updateUI(null, true);
+                            }
+                        }
+                    });
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "Fields cannot be empty", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
-    public void toRegisto(View view) {        //Ao clicar em qualquer sítio do ecrã, passa para a próxima atividade, ou seja, para a página para efetuar o registo
+    private void setCurrentUser(String email) {
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("users")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String aux = (String)document.getData().get("email");
+                                if(aux == email){
+                                    writeUser(String.valueOf((Long)document.getData().get("id")));
+                                }
+                            }
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+
+    }
+
+    public void toRegisto(View view) {
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(intent);
     }

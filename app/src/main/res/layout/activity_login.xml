@@ -10,19 +10,19 @@
         android:id="@+id/topview"
         android:layout_width="0dp"
         android:layout_height="150dp"
+        android:background="@color/corUBI"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/corUBI"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/wave_view"
         android:layout_width="0dp"
         android:layout_height="100dp"
+        android:background="@drawable/ic_wave"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topview"
-        android:background="@drawable/ic_wave"/>
+        app:layout_constraintTop_toBottomOf="@+id/topview" />
 
     <ImageView
         android:id="@+id/logo"
@@ -55,16 +55,16 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:ems="10"
-        android:inputType="text"
-        android:hint="Email / Username"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/wave_view"
+        android:background="@drawable/border"
         android:drawableStart="@drawable/email"
         android:drawablePadding="16dp"
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
         android:padding="16dp"
-        android:background="@drawable/border"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/wave_view" />
 
     <EditText
         android:id="@+id/pass_input"
@@ -73,16 +73,16 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
-        android:ems="10"
-        android:inputType="textPassword"
-        android:hint="Password"
+        android:background="@drawable/border"
         android:drawableStart="@drawable/lock"
         android:drawablePadding="16dp"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email_text"
-        android:padding="16dp"
-        android:background="@drawable/border"/>
+        app:layout_constraintTop_toBottomOf="@+id/email_text" />
 
     <Button
         android:id="@+id/login_button"
@@ -91,14 +91,14 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
+        android:background="@drawable/border_button"
+        android:onClick="toFeed"
         android:text="LOGIN"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:background="@drawable/border_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pass_input"
-        android:onClick="toFeed"/>
+        app:layout_constraintTop_toBottomOf="@+id/pass_input" />
 
     <TextView
         android:id="@+id/or"

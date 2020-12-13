@@ -134,7 +134,7 @@ public class RegisterActivity extends Util {
                                                                         startActivity(new Intent (getApplicationContext(), FeedActivity.class));
                                                                     }
                                                                 } else {
-                                                                    Log.w("TAG", "Error getting documents.", task.getException());
+                                                                    Log.w(TAG, "Error getting documents.", task.getException());
                                                                 }
                                                             }
                                                         });
