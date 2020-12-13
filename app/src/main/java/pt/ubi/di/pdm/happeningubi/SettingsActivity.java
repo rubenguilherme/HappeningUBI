@@ -49,10 +49,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
+public class SettingsActivity extends Util implements View.OnClickListener {
 
     private static final String TAG = "SettingsActivity";
-    TextView Language,Change_Foto,Report_Problem,Connect_Google,Connect_Facebook,LogOut;
+    TextView Language,Report_Problem,LogOut;
 
     private EditText Subject_Problem,Description_Problem;
     private AlertDialog.Builder dialogBuilder;
@@ -73,7 +73,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     CharSequence[] languages = {"Português","English"};
 
     //id user
-    Long userID = -1l;
+    Long userID;
     //language user
     String language = "";
 
@@ -88,6 +88,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
         mAuth = FirebaseAuth.getInstance();
+        userID = Long.parseLong(readUser());
 
         db.collection("users")
                 .get()
@@ -195,7 +196,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 });
     }
 
-    private void createReport(){
+    private void createReport(){ //nao implementada
         dialogBuilder = new AlertDialog.Builder(this);
         final View ReportPopupView = getLayoutInflater().inflate(R.layout.popup_reportproblem,null);
         Subject_Problem = (EditText) ReportPopupView.findViewById(R.id.assunto_report_edittext);
@@ -237,7 +238,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         alertDialogBuilder.setCancelable(true);
         alertDialogBuilder.setSingleChoiceItems(languages, lang, (dialog, which) -> {
             int selectedItem = which;
-            //change language block
             switch (selectedItem){
                 case 0: setAppLocale("pt");
                         db.collection("users").document(docID).update("language","PT");

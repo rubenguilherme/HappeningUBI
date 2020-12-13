@@ -1,7 +1,6 @@
 package pt.ubi.di.pdm.happeningubi;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,13 +21,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
-
-import java.util.Objects;
 
 public class FeedActivity extends Util {
 
@@ -52,7 +49,6 @@ public class FeedActivity extends Util {
 
         db = FirebaseFirestore.getInstance();
         userID = Long.parseLong(readUser());
-        //setAppLocale("applanguage"); Gonçalo -> Mudar Idioma -> NAO APAGAR
 
         /* Quando user der login , saber a language a partir da database e mudar o idioma para todas as activities
          */
@@ -121,7 +117,7 @@ public class FeedActivity extends Util {
                                     EventClass e = new EventClass((String) m.get("name"),
                                             (String) m.get("description"),(String) m.get("location"),
                                             "USER", (ArrayList<Long>) m.get("images"),
-                                            t,
+                                            t.toDate(),
                                             (long) m.get("user_id"), (long) m.get("id"));
                                     events.add(e);
                                 }

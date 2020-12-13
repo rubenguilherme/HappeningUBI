@@ -42,12 +42,12 @@ public class ShowEventActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "ShowEventActivity";
 
-    private String descricao_db,titulo,n_interessados,n_vao,horas;
+    private String descricao_db,titulo;
     private DatePicker time_stamp_data;
     private ArrayList<Integer> imagens;
 
     String docID;
-    Long userID = 0l, event_id;
+    EventClass event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,15 +59,14 @@ public class ShowEventActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         //get_event_extras
-        Intent getid = getIntent();
-        event_id = getid.getLongExtra("event_id", -1);
+        Intent getEvent = getIntent();
+        event = (EventClass) getEvent.getSerializableExtra("event");
 
-        getEventfromDataBase();
+        Log.d(TAG, event.toString());
+
         //
         Titulo = (TextView) findViewById(R.id.nome_evento_textview);
         Descricao = (TextView) findViewById(R.id.descricao_evento_textview);
-        N_VAO = (TextView) findViewById(R.id.numero_vao_evento_textview);
-        N_INTERESSADOS = (TextView) findViewById(R.id.numero_interessados_evento_textview);
         edit_descricao = (ImageView) findViewById(R.id.edit_descricao_imageview);
         Date = (TextView) findViewById(R.id.date_evento_textview);
         Horas = (TextView) findViewById(R.id.horas_evento_textview);
@@ -76,12 +75,13 @@ public class ShowEventActivity extends AppCompatActivity {
 
         //Titulo.setText(titulo);
         //Descricao.setText(descricao_db);
-        //N_VAO.setText(n_vao);
-        //N_INTERESSADOS.setText(n_interessados);
         //Date.setText(time_stamp_data)
         //Horas.setText(horas);
 
         //clicar next and before to change event image
+
+
+        //
 
     }
     private void createPopup(){
@@ -101,34 +101,6 @@ public class ShowEventActivity extends AppCompatActivity {
         });
         Cancelar.setOnClickListener(v -> dialog.dismiss());
 
-    }
-    public void getEventfromDataBase(){
-
-        Task<QuerySnapshot> users = db.collection("Event")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-
-                            Long i = (Long)document.getData().get("id");
-                            if(i.equals(""/*event_id*/)){
-                               docID = document.getId();
-                               titulo = (String) document.getData().get("name");
-                               descricao_db = (String) document.getData().get("description");
-                               //n_interessados = (String) document.getData().get()
-                               //n_vao = (String) document.getData().get()
-                               imagens = new ArrayList<>();
-                               imagens = (ArrayList<Integer>) document.getData().get("images");
-                               time_stamp_data = (DatePicker) document.getData().get("event_date");
-                               //horas = (String) document.getData().get("");
-
-
-                            }
-                        }
-                    } else {
-                        Log.w(TAG, "Error getting documents.", task.getException());
-                    }
-                });
     }
     private void restart(){
         Intent intent = new Intent(ShowEventActivity.this,ShowEventActivity.class);
