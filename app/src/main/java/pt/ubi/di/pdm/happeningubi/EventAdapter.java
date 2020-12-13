@@ -63,7 +63,7 @@ public class EventAdapter extends RecyclerView.Adapter<ViewHolder> {
         }
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        view = inflater.inflate(R.layout.viewholder_event, parent, false);
+        view = inflater.inflate(R.layout.event_viewholder, parent, false);
         return new EventViewHolder(view);
     }
 
@@ -85,18 +85,11 @@ public class EventAdapter extends RecyclerView.Adapter<ViewHolder> {
             d += ":";
             if (m < 10) d += "0" + m; else d += m;
             vh.eventDate.setText(d);
-            if (e.getImages().size() > 0)
-                GlideApp.with(context).load(storageRef.child("images/" + e.getImages().get(0) + ".jpg")).into(vh.eventImage);
-            else
-                vh.eventImage.setVisibility(View.GONE);
-            vh.eventLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, ShowEventActivity.class);
-                    intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("event",e);
-                    context.startActivity(intent);
-                }
+            vh.eventLayout.setOnClickListener(v -> {
+                Intent intent = new Intent(context, ShowEventActivity.class);
+                intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("event",e);
+                context.startActivity(intent);
             });
             //notifyDataSetChanged();
         } else if(holder instanceof ProfileViewHolder) {
@@ -138,10 +131,9 @@ public class EventAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     public class EventViewHolder extends ViewHolder {
 
-        ImageView userImage, eventImage;
-        TextView userName,eventName,eventDesc,eventLoc, eventGoing, eventInterested, eventDate;
-        LinearLayout eventButtons, eventLayout;
-        Button addGoing, addInterested;
+        ImageView userImage;
+        TextView userName,eventName,eventDesc,eventLoc, eventDate;
+        LinearLayout eventLayout;
 
         public EventViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -150,14 +142,8 @@ public class EventAdapter extends RecyclerView.Adapter<ViewHolder> {
             eventName = itemView.findViewById(R.id.event_name);
             eventDesc = itemView.findViewById(R.id.event_desc);
             eventLoc = itemView.findViewById(R.id.event_location);
-            eventImage = itemView.findViewById(R.id.event_image);
-            eventButtons = itemView.findViewById(R.id.event_buttons);
-            eventGoing = itemView.findViewById(R.id.event_going);
-            eventInterested = itemView.findViewById(R.id.event_interested);
             eventDate = itemView.findViewById(R.id.event_date);
             eventLayout = itemView.findViewById(R.id.event_layout);
-            addGoing = itemView.findViewById(R.id.event_add_going);
-            addInterested = itemView.findViewById(R.id.event_add_interested);
         }
     }
 

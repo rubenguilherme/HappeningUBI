@@ -15,36 +15,34 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
+import java.util.Calendar;
 
-public class ShowEventActivity extends AppCompatActivity {
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-    private ImageView edit_descricao,imagem_evento;
+public class ShowEventActivity extends Util implements View.OnClickListener {
+
+    private ImageView edit_descricao,imagem_evento,back_arrow,front_arrow,showevent_Back;
     private AlertDialog.Builder dialogbuilder;
     private AlertDialog dialog;
-    private TextView Descricao,Titulo,N_VAO,N_INTERESSADOS,Date,Horas;
+    private TextView Descricao,Titulo,Date,Horas;
     private EditText NewDescricao;
     private Button Cancelar,Editar;
+    private StorageReference storageRef;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "ShowEventActivity";
 
-    private String descricao_db,titulo;
-    private DatePicker time_stamp_data;
-    private ArrayList<Integer> imagens;
+    private static int i = 0;
+
+    private String descricao,titulo,localizacao,horas,time_stamp_data;
+    private ArrayList<Long> imagens;
 
     String docID;
     EventClass event;
@@ -58,55 +56,85 @@ public class ShowEventActivity extends AppCompatActivity {
         setSupportActionBar(oToolBar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        storageRef = FirebaseStorage.getInstance().getReference();
         //get_event_extras
         Intent getEvent = getIntent();
         event = (EventClass) getEvent.getSerializableExtra("event");
-
+        getEventDetails(event);
         Log.d(TAG, event.toString());
 
         //
         Titulo = (TextView) findViewById(R.id.nome_evento_textview);
         Descricao = (TextView) findViewById(R.id.descricao_evento_textview);
-        edit_descricao = (ImageView) findViewById(R.id.edit_descricao_imageview);
         Date = (TextView) findViewById(R.id.date_evento_textview);
         Horas = (TextView) findViewById(R.id.horas_evento_textview);
         imagem_evento = (ImageView) findViewById(R.id.imagem_evento_imageview);
-        edit_descricao.setOnClickListener(v -> createPopup());
+        back_arrow = (ImageView) findViewById(R.id.imagem_anterior_imageview);
+        front_arrow = (ImageView) findViewById(R.id.imagem_aseguir_imageview);
+        showevent_Back = (ImageView) findViewById(R.id.showevent_back);
 
-        //Titulo.setText(titulo);
-        //Descricao.setText(descricao_db);
-        //Date.setText(time_stamp_data)
-        //Horas.setText(horas);
+        showevent_Back.setOnClickListener(v -> {
+            i = 0;
+            finish();
+        });
+
+        back_arrow.setOnClickListener(this);
+        front_arrow.setOnClickListener(this);
+
+        Titulo.setText(titulo);
+        Descricao.setText(descricao);
+        Date.setText(time_stamp_data);
+        Horas.setText(horas);
 
         //clicar next and before to change event image
-
-
+        if (event.getImages().size() > 0) {
+            GlideApp.with(this).load(storageRef.child("images/" + event.getImages().get(i) + ".jpg")).into(imagem_evento);
+        }
         //
 
     }
-    private void createPopup(){
-        dialogbuilder = new AlertDialog.Builder(this);
-        final View EditDescPopupView = getLayoutInflater().inflate(R.layout.popup_editar_descricao_evento,null);
-        NewDescricao = (EditText) EditDescPopupView.findViewById(R.id.nova_descricao_editText);
-        Editar = (Button) EditDescPopupView.findViewById(R.id.editar_descricao_popup_button);
-        Cancelar = (Button) EditDescPopupView.findViewById(R.id.cancelar_editar_descricao_popup_button);
-
-
-
-        Editar.setOnClickListener(v -> {
-            String nova_descricao = NewDescricao.getText().toString().trim();
-            db.collection("Event").document(docID).update("description",nova_descricao);
-            restart();
-            Toast.makeText(ShowEventActivity.this,"Enviado com sucesso",Toast.LENGTH_SHORT).show();
-        });
-        Cancelar.setOnClickListener(v -> dialog.dismiss());
-
+    @Override
+    public void onClick(View v) {
+        if (event.getImages().size() > 0) {
+            switch (v.getId()) {
+                case R.id.imagem_anterior_imageview:
+                    if ((i-1) < 0){
+                        Log.d(TAG, "-1 imagem :" + i);
+                        i = (event.getImages().size()) - 1;}
+                    else i--;
+                    GlideApp.with(this).load(storageRef.child("images/" + event.getImages().get(i) + ".jpg")).into(imagem_evento);
+                    Log.d(TAG, "new imagem :" + i);
+                    break;
+                case R.id.imagem_aseguir_imageview:
+                    if ((i+1) == event.getImages().size()){
+                        Log.d(TAG, "+1 imagem :" + i);
+                        i = 0;}
+                    else i++;
+                    GlideApp.with(this).load(storageRef.child("images/" + event.getImages().get(i) + ".jpg")).into(imagem_evento);
+                    Log.d(TAG, "new imagem :" + i);
+                    break;
+            }
+        }
     }
+
     private void restart(){
         Intent intent = new Intent(ShowEventActivity.this,ShowEventActivity.class);
         finish();
         overridePendingTransition(0,0);
         startActivity(intent);
         overridePendingTransition(0,0);
+    }
+    private void getEventDetails(EventClass event){
+        titulo = event.getName();
+        descricao = event.getDescription();
+        localizacao = event.getLocation();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(event.getDate());
+        String d = cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.YEAR) + "  ";
+        int h = cal.get(Calendar.HOUR_OF_DAY), m = cal.get(Calendar.MINUTE);
+        time_stamp_data = d;
+        horas = h + ":" + m;
+        imagens = event.getImages();
+
     }
 }

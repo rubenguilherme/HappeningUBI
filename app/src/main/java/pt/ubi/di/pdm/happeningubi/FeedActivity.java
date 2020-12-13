@@ -35,7 +35,7 @@ public class FeedActivity extends Util {
     private FirebaseFirestore db;
     private static boolean restarted = true;
     String language_user = "";
-    Long userID = -1l;
+    Long userID;
     String docID;
     private static final String TAG = "FeedActivity";
 
@@ -123,7 +123,7 @@ public class FeedActivity extends Util {
                                 }
                             }
                             recyclerView = findViewById(R.id.feed_recyclerView);
-                            adapter = new EventAdapter(getApplicationContext(),events, EventAdapter.TYPE_FEED, userID);
+                            adapter = new EventAdapter(FeedActivity.this,events, EventAdapter.TYPE_FEED, userID);
                             recyclerView.setAdapter(adapter);
                             recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                         } else {

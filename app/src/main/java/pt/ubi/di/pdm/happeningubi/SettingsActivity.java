@@ -100,7 +100,7 @@ public class SettingsActivity extends Util implements View.OnClickListener {
                             if(i.equals(userID)){
                                 docID = document.getId();
                                 language = String.valueOf(document.getData().get("language")).toLowerCase();
-                                if(language.equals(null))
+                                if(language.equals(""))
                                     language = "pt";
                             }
                         }
