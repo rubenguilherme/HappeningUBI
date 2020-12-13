@@ -1,31 +1,20 @@
 package pt.ubi.di.pdm.happeningubi;
 
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.Date;
 
 public class EventClass implements Serializable {
 
     private String name, description, location, user;
-    private ArrayList<Long> images, going, interested;
-    private Timestamp date;
+    private ArrayList<Long> images;
+    private Date date;
     private long userID, eventID;
     private FirebaseFirestore db;
 
-    public EventClass(String name, String description, String location, String user, ArrayList<Long> images, Timestamp date, long userID, long eventID) {
+    public EventClass(String name, String description, String location, String user, ArrayList<Long> images, Date date, long userID, long eventID) {
         this.name = name;
         this.description = description;
         this.location = location;
@@ -34,8 +23,6 @@ public class EventClass implements Serializable {
         this.date = date;
         this.userID = userID;
         this.eventID = eventID;
-        going = new ArrayList<>();
-        interested = new ArrayList<>();
     }
 
     public long getEventID() {
@@ -90,52 +77,11 @@ public class EventClass implements Serializable {
         images.add(id);
     }
 
-    public ArrayList<Long> getGoing() {
-        return going;
-    }
-
-    public void setGoing(ArrayList<Long> going) {
-        this.going = going;
-    }
-
-    public void addGoing(long id) {
-        going.add(id);
-    }
-
-    public ArrayList<Long> getInterested() {
-        return interested;
-    }
-
-    public void setInterested(ArrayList<Long> interested) {
-        this.interested = interested;
-    }
-
-    public void addInterested(long id) {
-        db = FirebaseFirestore.getInstance();
-        db.collection("Lists")
-                .whereEqualTo("type", "interested")
-                .whereEqualTo("id", id)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Map m = document.getData();
-                            }
-                        } else {
-                            Log.w("TAG", "Error getting documents.", task.getException());
-                        }
-                    }
-                });
-        interested.add(id);
-    }
-
-    public Timestamp getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

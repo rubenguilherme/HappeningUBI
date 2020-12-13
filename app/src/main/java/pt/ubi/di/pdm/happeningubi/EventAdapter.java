@@ -78,7 +78,7 @@ public class EventAdapter extends RecyclerView.Adapter<ViewHolder> {
             vh.eventDesc.setText(e.getDescription());
             vh.eventLoc.setText(e.getLocation());
             Calendar cal = Calendar.getInstance();
-            cal.setTime(e.getDate().toDate());
+            cal.setTime(e.getDate());
             String d = cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.YEAR) + "  ";
             int h = cal.get(Calendar.HOUR_OF_DAY), m = cal.get(Calendar.MINUTE);
             if (h < 10) d += "0" + h; else d += h;
@@ -89,22 +89,6 @@ public class EventAdapter extends RecyclerView.Adapter<ViewHolder> {
                 GlideApp.with(context).load(storageRef.child("images/" + e.getImages().get(0) + ".jpg")).into(vh.eventImage);
             else
                 vh.eventImage.setVisibility(View.GONE);
-            vh.eventGoing.setText(String.valueOf(e.getGoing().size()));
-            vh.eventInterested.setText(String.valueOf(e.getInterested().size()));
-            vh.addGoing.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    e.addGoing(1);
-                    notifyDataSetChanged();
-                }
-            });
-            vh.addInterested.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    e.addInterested(1);
-                    notifyDataSetChanged();
-                }
-            });
             vh.eventLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
