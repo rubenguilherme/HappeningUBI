@@ -245,6 +245,7 @@ public class AddEventActivity extends AppCompatActivity implements TimePickerDia
 
     private void pickImageFromGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         startActivityForResult(intent, IMAGE_PICK_CODE);
     }
 
@@ -252,12 +253,15 @@ public class AddEventActivity extends AppCompatActivity implements TimePickerDia
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE) {
-            files.add(data.getData());
-            existFile = true;
-            id_files.add(img_id);
-            img_id++;
-            flag++;
-            //ivImage.setImageURI(img);
+            int count = data.getClipData().getItemCount(); //evaluate the count before the for loop --- otherwise, the count is evaluated every loop.
+            for(int i = 0; i < count; i++) {
+                files.add(data.getData());
+                existFile = true;
+                id_files.add(img_id);
+                img_id++;
+                flag++;
+                //ivImage.setImageURI(img);
+            }
         }
     }
 
