@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ public class EditProfileActivity extends Util {
 
     private EditText name;
     private TextView email;
+    private ImageView image;
     private String pass, docID, emailS;
     Uri photo;
     boolean existFile = false;
@@ -38,6 +40,7 @@ public class EditProfileActivity extends Util {
     private static final int PERMISSION_CODE = 1001;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +49,9 @@ public class EditProfileActivity extends Util {
 
         name = (EditText)findViewById(R.id.nameET);
         email = (TextView) findViewById(R.id.changeEmailTV);
+        image = (ImageView) findViewById(R.id.imageView);
 
+        GlideApp.with(this).load(storageRef.child("userimages/" + Long.parseLong(readUser()) + ".jpg")).error(GlideApp.with(image).load(R.drawable.account_default_icon)).into(image);
         //read UserID from file(?)
         //example: -1
 
