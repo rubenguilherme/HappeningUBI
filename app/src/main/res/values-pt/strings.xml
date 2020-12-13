@@ -45,5 +45,7 @@
     <string name="pick_time">Definir hora</string>
     <string name="deleteAcc">Apagar Conta</string>
     <string name="changeEmail">Alterar Email</string>
+    <string name="add_pic">Adicionar uma foto de perfil</string>
+    <string name="confirm">Confirmar</string>
 </resources>
 

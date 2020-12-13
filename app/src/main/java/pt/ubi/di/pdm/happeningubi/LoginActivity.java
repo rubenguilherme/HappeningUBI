@@ -34,6 +34,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class LoginActivity extends Util {
 
@@ -54,9 +56,7 @@ public class LoginActivity extends Util {
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         if(currentUser != null)
-            setCurrentUser(currentUser.getEmail());
-
-        updateUI(currentUser, false);
+            setCurrentUser(currentUser.getEmail(), currentUser, false);
     }
 
     @Override
@@ -112,86 +112,96 @@ public class LoginActivity extends Util {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         assert user != null;
-                        addUserToDatabase(user.getEmail(), user.getDisplayName());
+                        addUserToDatabase(user.getEmail(), user.getDisplayName(), true, user);
                         Toast.makeText(LoginActivity.this, user.getEmail()+ "\n" +user.getDisplayName(), Toast.LENGTH_SHORT).show();
-                        updateUI(user, false);
+
                     } else {
                         // If sign in fails, display a message to the user.
                         Toast.makeText(LoginActivity.this, Objects.requireNonNull(task.getException()).toString() , Toast.LENGTH_SHORT).show();
-                        updateUI(null, false);
+                        addUserToDatabase("", "", false, null);
                     }
 
                     // ...
                 });
     }
 
-    private void addUserToDatabase(String email, String name) {
+    private void addUserToDatabase(String email, String name, boolean flag, FirebaseUser userID) {
 
-        String username = email.split("@")[0];
+        if(userID != null) {
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+            String username = email.split("@")[0];
 
-        db.collection("NextIDS")
-                .orderBy("users", Query.Direction.DESCENDING)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(), "User created.", Toast.LENGTH_LONG).show();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                nextID = (Long) document.getData().get("users");
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-                                Map<String, Object> user = new HashMap<>();
-                                user.put("email", email);
-                                user.put("id", nextID);
-                                user.put("language", "");
-                                user.put("name", name);
-                                user.put("profile_pic_id", -1L);
-                                user.put("username", username);
+            db.collection("NextIDS")
+                    .orderBy("users", Query.Direction.DESCENDING)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(getApplicationContext(), "User created.", Toast.LENGTH_LONG).show();
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    nextID = (Long) document.getData().get("users");
 
-                                writeUser(String.valueOf(nextID));
+                                    Map<String, Object> user = new HashMap<>();
+                                    user.put("email", email);
+                                    user.put("id", nextID);
+                                    user.put("language", "");
+                                    user.put("name", name);
+                                    user.put("profile_pic_id", -1L);
+                                    user.put("username", username);
 
-                                // Add a new document with a generated ID
-                                db.collection("users")
-                                        .add(user)
-                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                            @Override
-                                            public void onSuccess(DocumentReference documentReference) {
-                                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.d(TAG, "Error adding document", e);
-                                            }
-                                        });
+                                    writeUser(String.valueOf(nextID));
 
-                                //update table ID
-                                db.collection("NextIDS").document("wOf4zrNyF21HPlQiFPjJ").update("users", Long.valueOf(nextID + 1));
+                                    // Add a new document with a generated ID
+                                    db.collection("users")
+                                            .add(user)
+                                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                @Override
+                                                public void onSuccess(DocumentReference documentReference) {
+                                                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.d(TAG, "Error adding document", e);
+                                                }
+                                            });
 
+                                    //update table ID
+                                    db.collection("NextIDS").document("wOf4zrNyF21HPlQiFPjJ").update("users", Long.valueOf(nextID + 1));
+
+                                    updateUI(userID, flag);
+
+                                }
+                            } else {
+                                Log.w(TAG, "Error getting documents.", task.getException());
                             }
                         }
-                        else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
-                });
+                    });
+        }
     }
 
     private void updateUI(FirebaseUser user, boolean flag) {
-        if(user != null) {
-            Intent intent = new Intent(this, FeedActivity.class);
-            startActivity(intent);
-            finish();
-        }
-        else {
-            if(flag){
-                email.setError("Check if email is correct");
-                password.setError("Check if password is correct");
+        new Timer().schedule(new TimerTask(){
+            @Override
+            public void run(){
+                if(user != null) {
+                    Intent intent = new Intent(getApplicationContext(), FeedActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else {
+                    if(flag){
+                        email.setError("Check if email is correct");
+                        password.setError("Check if password is correct");
+                    }
+                }
             }
-        }
+        }, 100);
+
     }
 
 
@@ -211,13 +221,12 @@ public class LoginActivity extends Util {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "signInWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
-                                setCurrentUser(emailS);
-                                updateUI(user, true);
+                                setCurrentUser(emailS, user, true);
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "signInWithEmail:failure", task.getException());
                                 Toast.makeText(getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
-                                updateUI(null, true);
+                                setCurrentUser("",null, true);
                             }
                         }
                     });
@@ -228,27 +237,32 @@ public class LoginActivity extends Util {
 
     }
 
-    private void setCurrentUser(String email) {
+    private void setCurrentUser(String email, FirebaseUser user, boolean flag) {
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        if(user != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection("users")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                String aux = (String)document.getData().get("email");
-                                if(aux == email){
-                                    writeUser(String.valueOf((Long)document.getData().get("id")));
+            db.collection("users")
+                    .whereEqualTo("email", email)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    String aux = (String) document.getData().get("email");
+                                    if (aux.equals(email)) {
+                                        writeUser(String.valueOf((Long) document.getData().get("id")));
+                                        updateUI(user, flag);
+                                    }
                                 }
+                            } else {
+                                Log.w(TAG, "Error getting documents.", task.getException());
                             }
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
                         }
-                    }
-                });
+                    });
+        }
+
 
     }
 

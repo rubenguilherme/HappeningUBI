@@ -45,4 +45,6 @@
     <string name="pick_time">Define hour</string>
     <string name="deleteAcc">Delete Account</string>
     <string name="changeEmail">Change Email</string>
+    <string name="add_pic">Add a profile picture</string>
+    <string name="confirm">Confirm</string>
 </resources>

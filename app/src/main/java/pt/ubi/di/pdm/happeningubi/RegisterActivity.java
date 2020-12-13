@@ -1,17 +1,28 @@
 package pt.ubi.di.pdm.happeningubi;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,7 +36,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -34,7 +49,6 @@ public class RegisterActivity extends Util {
 
     EditText mNome, mUser, mEmail, mPassword, mPassConfirm;
     FirebaseAuth fAuth;
-    Button mRegisterButton;
     Long nextID;
 
     private static final String TAG = "RegisterActivity";
@@ -51,116 +65,104 @@ public class RegisterActivity extends Util {
         mEmail = findViewById(R.id.emailRegisto);
         mPassword = findViewById(R.id.passRegisto);
         mPassConfirm = findViewById(R.id.confirm_passRegisto);
-        mRegisterButton = findViewById(R.id.login_button);
 
         fAuth = FirebaseAuth.getInstance();
 
-        mRegisterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = mNome.getText().toString().trim();
-                String username = mUser.getText().toString().trim();
-                String email = mEmail.getText().toString().trim();
-                String password = mPassword.getText().toString().trim();
-                String confirmpassword = mPassConfirm.getText().toString().trim();
+    }
 
-                if(TextUtils.isEmpty(email)){
-                    mEmail.setError("Email is Required.");
+    public void toFeed(View v) {
+        String name = mNome.getText().toString().trim();
+        String username = mUser.getText().toString().trim();
+        String email = mEmail.getText().toString().trim();
+        String password = mPassword.getText().toString().trim();
+        String confirmpassword = mPassConfirm.getText().toString().trim();
 
-                }else{
-                    if(TextUtils.isEmpty(password)){
-                        mPassword.setError("Password is required");
+        if (TextUtils.isEmpty(email)) {
+            mEmail.setError("Email is Required.");
 
-                    }else{
-                        if(TextUtils.isEmpty(confirmpassword)){
-                            mPassword.setError("Confirm your Password");
+        } else {
+            if (TextUtils.isEmpty(password)) {
+                mPassword.setError("Password is required");
 
-                        }else{
-                            if(password.length() < 6){
-                                mPassword.setError("Password must be >= 6 Characteres");
+            } else {
+                if (TextUtils.isEmpty(confirmpassword)) {
+                    mPassword.setError("Confirm your Password");
 
-                            }else{
-                                if(!confirmpassword.equals(password)){
-                                    mPassConfirm.setError("Passwords must be equals.");
+                } else {
+                    if (password.length() < 6) {
+                        mPassword.setError("Password must be >= 6 Characteres");
 
-                                }else{
-                                    fAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<AuthResult> task) {
-                                            if(task.isSuccessful()){
+                    } else {
+                        if (!confirmpassword.equals(password)) {
+                            mPassConfirm.setError("Passwords must be equals.");
 
-                                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        } else {
+                            fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
 
-                                                db.collection("NextIDS")
-                                                        .orderBy("users", Query.Direction.DESCENDING)
-                                                        .get()
-                                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                if (task.isSuccessful()) {
-                                                                    Toast.makeText(RegisterActivity.this, "User created.", Toast.LENGTH_LONG).show();
-                                                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                                                        nextID = (Long)document.getData().get("users");
+                                        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-                                                                        Map<String, Object> user = new HashMap<>();
-                                                                        user.put("email", email);
-                                                                        user.put("id", nextID);
-                                                                        user.put("language", "");
-                                                                        user.put("name", name);
-                                                                        user.put("profile_pic_id", -1L);
-                                                                        user.put("username", username);
+                                        db.collection("NextIDS")
+                                                .orderBy("users", Query.Direction.DESCENDING)
+                                                .get()
+                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                        if (task.isSuccessful()) {
+                                                            Toast.makeText(RegisterActivity.this, "User created.", Toast.LENGTH_LONG).show();
+                                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                                nextID = (Long) document.getData().get("users");
 
-                                                                        writeUser(String.valueOf(nextID));
+                                                                Map<String, Object> user = new HashMap<>();
+                                                                user.put("email", email);
+                                                                user.put("id", nextID);
+                                                                user.put("language", "");
+                                                                user.put("name", name);
+                                                                user.put("profile_pic_id", -1L);
+                                                                user.put("username", username);
 
-                                                                        // Add a new document with a generated ID
-                                                                        db.collection("users")
-                                                                                .add(user)
-                                                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                                                    @Override
-                                                                                    public void onSuccess(DocumentReference documentReference) {
-                                                                                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                                                                                    }
-                                                                                })
-                                                                                .addOnFailureListener(new OnFailureListener() {
-                                                                                    @Override
-                                                                                    public void onFailure(@NonNull Exception e) {
-                                                                                        Log.d(TAG, "Error adding document", e);
-                                                                                    }
-                                                                                });
+                                                                writeUser(String.valueOf(nextID));
 
-                                                                        //update table ID
-                                                                        db.collection("NextIDS").document("wOf4zrNyF21HPlQiFPjJ").update("users", Long.valueOf(nextID+1));
+                                                                // Add a new document with a generated ID
+                                                                db.collection("users")
+                                                                        .add(user)
+                                                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                                            @Override
+                                                                            public void onSuccess(DocumentReference documentReference) {
+                                                                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                                                            }
+                                                                        })
+                                                                        .addOnFailureListener(new OnFailureListener() {
+                                                                            @Override
+                                                                            public void onFailure(@NonNull Exception e) {
+                                                                                Log.d(TAG, "Error adding document", e);
+                                                                            }
+                                                                        });
 
-                                                                        startActivity(new Intent (getApplicationContext(), FeedActivity.class));
-                                                                    }
-                                                                } else {
-                                                                    Log.w(TAG, "Error getting documents.", task.getException());
-                                                                }
+                                                                //update table ID
+                                                                db.collection("NextIDS").document("wOf4zrNyF21HPlQiFPjJ").update("users", Long.valueOf(nextID + 1));
+
+                                                                startActivity(new Intent(getApplicationContext(), FeedActivity.class));
                                                             }
-                                                        });
-                                            }
-                                            else{
-                                                Toast.makeText(RegisterActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    });
+                                                        } else {
+                                                            Log.w(TAG, "Error getting documents.", task.getException());
+                                                        }
+                                                    }
+                                                });
+                                    } else {
+                                        Toast.makeText(RegisterActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
+                            });
                         }
-
                     }
-
                 }
             }
-        });
-
+        }
     }
 
-    public void toFeed(View view) {        //Ao clicar em qualquer sítio do ecrã, passa para a próxima atividade, ou seja, para a página de login
-        //Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-        //startActivity(intent);
-        //finish();
-    }
 
     private void setAppLocale(String localeCode){ //Gonçalo -> Mudar Idioma -> NAO APAGAR
         Resources res = getResources();
@@ -168,5 +170,8 @@ public class RegisterActivity extends Util {
         Configuration conf = res.getConfiguration();
         conf.setLocale(new Locale(localeCode.toLowerCase()));
         res.updateConfiguration(conf,dm);
+    }
+
+    public void addPic(View view) {
     }
 }
