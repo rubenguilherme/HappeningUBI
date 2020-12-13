@@ -15,24 +15,29 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
+
 import java.util.Objects;
 
-public class FeedActivity extends AppCompatActivity {
+public class FeedActivity extends Util {
 
     private RecyclerView recyclerView;
     private ArrayList<EventClass> events;
     private EventAdapter adapter;
-    private static boolean restarted=true;
-
-    //Gonçalo
+    private FirebaseFirestore db;
+    private static boolean restarted = true;
     String language_user = "";
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
     Long userID = -1l;
     String docID;
     private static final String TAG = "FeedActivity";
@@ -45,34 +50,9 @@ public class FeedActivity extends AppCompatActivity {
         setSupportActionBar(oToolBar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        events = new ArrayList<>();
-
-        //PARA TESTAR
-        events.add(new EventClass("EVENTO1","DESCRICAO","COVILHA", "USER1", null, new Date(System.currentTimeMillis()), 1));
-        events.add(new EventClass("EVENTO2","DESCRICAO","COVILHA", "USER1", null, new Date(System.currentTimeMillis()), 1));
-        events.add(new EventClass("EVENTO3","DESCRICAO","COVILHA", "USER1", null, new Date(System.currentTimeMillis()), 1));
-        events.add(new EventClass("EVENTO3","DESCRICAO","COVILHA", "USER1", null, new Date(System.currentTimeMillis()), 1));
-        events.add(new EventClass("EVENTO3","DESCRICAO","COVILHA", "USER1", null, new Date(System.currentTimeMillis()), 1));
-        events.get(0).addGoing(50);
-        events.get(1).addGoing(60);
-        events.get(1).addGoing(60);
-        events.get(2).addGoing(70);
-        events.get(2).addGoing(70);
-        events.get(2).addGoing(70);
-        events.get(3).addGoing(80);
-        events.get(3).addGoing(80);
-        events.get(3).addGoing(80);
-        events.get(3).addGoing(80);
-        events.get(4).addGoing(90);
-        events.get(4).addGoing(90);
-        events.get(4).addGoing(90);
-        events.get(4).addGoing(90);
-        events.get(4).addGoing(90);
-
-        recyclerView = findViewById(R.id.feed_recyclerView);
-        adapter = new EventAdapter(this,events, EventAdapter.TYPE_FEED);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        db = FirebaseFirestore.getInstance();
+        userID = Long.parseLong(readUser());
+        //setAppLocale("applanguage"); Gonçalo -> Mudar Idioma -> NAO APAGAR
 
         /* Quando user der login , saber a language a partir da database e mudar o idioma para todas as activities
          */
@@ -100,6 +80,12 @@ public class FeedActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        loadEvents();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.bar_feed,menu);
         return true;
@@ -110,7 +96,6 @@ public class FeedActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.feed_profile:
                 Intent intent = new Intent(this, ProfileActivity.class);
-                intent.putExtra("events",events);
                 startActivity(intent);
                 break;
             case R.id.feed_add:
@@ -121,16 +106,38 @@ public class FeedActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent iResult) {
-        super.onActivityResult(requestCode, resultCode, iResult);
-        if ((10 == requestCode) && (resultCode == RESULT_OK)) {
-            EventClass e = (EventClass) iResult.getSerializableExtra("event");
-            events.add(e);
-            adapter.notifyDataSetChanged();
-        }
+    private void loadEvents() {
+        events = new ArrayList<>();
+        db.collection("Event")
+            .orderBy("event_date", Query.Direction.ASCENDING).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map m = document.getData();
+                                Timestamp t = ((Timestamp) m.get("event_date"));
+                                if ((t.getSeconds() + 86400) < Timestamp.now().getSeconds()) {
+                                    EventClass e = new EventClass((String) m.get("name"),
+                                            (String) m.get("description"),(String) m.get("location"),
+                                            "USER", (ArrayList<Long>) m.get("images"),
+                                            t,
+                                            (long) m.get("user_id"), (long) m.get("id"));
+                                    events.add(e);
+                                }
+                            }
+                            recyclerView = findViewById(R.id.feed_recyclerView);
+                            adapter = new EventAdapter(getApplicationContext(),events, EventAdapter.TYPE_FEED, userID);
+                            recyclerView.setAdapter(adapter);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                        } else {
+                            Log.w("TAG", "Error getting documents.", task.getException());
+                        }
+                    }
+                });
     }
-    private void setAppLocale(String localeCode){
+
+    private void setAppLocale(String localeCode){ //Gonçalo -> Mudar Idioma -> NAO APAGAR
         Resources res = getResources();
         DisplayMetrics dm = res.getDisplayMetrics();
         Configuration conf = res.getConfiguration();

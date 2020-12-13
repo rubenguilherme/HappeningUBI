@@ -15,7 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HappeningUBI">
         <activity android:name=".EditProfileActivity"/>
-        <activity android:name=".EventsCreatedActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".SettingsActivity" />

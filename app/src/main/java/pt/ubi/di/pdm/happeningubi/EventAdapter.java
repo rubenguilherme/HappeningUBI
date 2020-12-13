@@ -2,6 +2,7 @@ package pt.ubi.di.pdm.happeningubi;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,25 +12,44 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class EventAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     public static final int TYPE_FEED = 0;
     public static final int TYPE_PROFILE = 1;
-    public static final int TYPE_CREATED = 2;
 
     private Context context;
     private ArrayList<EventClass> events;
-    private int type;
+    private int type, userid;
+    private StorageReference storageRef;
+    private FirebaseFirestore db;
+    private String userName;
 
-    public EventAdapter(Context c, ArrayList<EventClass> e, int t) {
+    public EventAdapter(Context c, ArrayList<EventClass> e, int t, Long id) {
+        storageRef = FirebaseStorage.getInstance().getReference();
         context = c;
         events = e;
         type  = t;
+        userid = id.intValue();
     }
 
     @NonNull
@@ -57,7 +77,18 @@ public class EventAdapter extends RecyclerView.Adapter<ViewHolder> {
             vh.eventName.setText(e.getName());
             vh.eventDesc.setText(e.getDescription());
             vh.eventLoc.setText(e.getLocation());
-            vh.eventImage.setImageResource(R.drawable.bifana);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(e.getDate().toDate());
+            String d = cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.YEAR) + "  ";
+            int h = cal.get(Calendar.HOUR_OF_DAY), m = cal.get(Calendar.MINUTE);
+            if (h < 10) d += "0" + h; else d += h;
+            d += ":";
+            if (m < 10) d += "0" + m; else d += m;
+            vh.eventDate.setText(d);
+            if (e.getImages().size() > 0)
+                GlideApp.with(context).load(storageRef.child("images/" + e.getImages().get(0) + ".jpg")).into(vh.eventImage);
+            else
+                vh.eventImage.setVisibility(View.GONE);
             vh.eventGoing.setText(String.valueOf(e.getGoing().size()));
             vh.eventInterested.setText(String.valueOf(e.getInterested().size()));
             vh.addGoing.setOnClickListener(new View.OnClickListener() {
@@ -74,17 +105,37 @@ public class EventAdapter extends RecyclerView.Adapter<ViewHolder> {
                     notifyDataSetChanged();
                 }
             });
-            if ((position - 1) % 2 == 0) vh.eventImage.setVisibility(View.GONE);
-        } else if(holder instanceof ProfileViewHolder) {
-            ProfileViewHolder vh = (ProfileViewHolder) holder;
-            vh.profileLinear.setOnClickListener(new View.OnClickListener() {
+            vh.eventLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, EventsCreatedActivity.class);
-                    intent.putExtra("events", events);
+                    Intent intent = new Intent(context, ShowEventActivity.class);
+                    intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("event_id",e.getEventID());
                     context.startActivity(intent);
-                    }
+                }
             });
+        } else if(holder instanceof ProfileViewHolder) {
+            ProfileViewHolder vh = (ProfileViewHolder) holder;
+            GlideApp.with(context).load(storageRef.child("userimages/" + userid + ".jpg")).error(GlideApp.with(vh.userImage).load(R.drawable.account_default_icon)).into(vh.userImage);
+
+            db = FirebaseFirestore.getInstance();
+            db.collection("users")
+                    .whereEqualTo("id", userid)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Map m = document.getData();
+                                    vh.userName.setText(m.get("name").toString());
+                                }
+                            } else {
+                                Log.w("TAG", "Error getting documents.", task.getException());
+                            }
+                        }
+                    });
+
         }
     }
 
@@ -103,8 +154,8 @@ public class EventAdapter extends RecyclerView.Adapter<ViewHolder> {
     public class EventViewHolder extends ViewHolder {
 
         ImageView userImage, eventImage;
-        TextView userName,eventName,eventDesc,eventLoc, eventGoing, eventInterested;
-        LinearLayout eventButtons;
+        TextView userName,eventName,eventDesc,eventLoc, eventGoing, eventInterested, eventDate;
+        LinearLayout eventButtons, eventLayout;
         Button addGoing, addInterested;
 
         public EventViewHolder(@NonNull View itemView) {
@@ -118,6 +169,8 @@ public class EventAdapter extends RecyclerView.Adapter<ViewHolder> {
             eventButtons = itemView.findViewById(R.id.event_buttons);
             eventGoing = itemView.findViewById(R.id.event_going);
             eventInterested = itemView.findViewById(R.id.event_interested);
+            eventDate = itemView.findViewById(R.id.event_date);
+            eventLayout = itemView.findViewById(R.id.event_layout);
             addGoing = itemView.findViewById(R.id.event_add_going);
             addInterested = itemView.findViewById(R.id.event_add_interested);
         }
@@ -126,15 +179,12 @@ public class EventAdapter extends RecyclerView.Adapter<ViewHolder> {
     public class ProfileViewHolder extends ViewHolder {
 
         ImageView userImage;
-        TextView createdText,createdNum;
-        LinearLayout profileLinear;
+        TextView userName;
 
         public ProfileViewHolder(@NonNull View itemView) {
             super(itemView);
             userImage = itemView.findViewById(R.id.profile_user_image);
-            createdText = itemView.findViewById(R.id.profile_created);
-            createdNum = itemView.findViewById(R.id.profile_event_count);
-            profileLinear = itemView.findViewById(R.id.profile_linear);
+            userName = itemView.findViewById(R.id.profile_user_name);
         }
     }
 }

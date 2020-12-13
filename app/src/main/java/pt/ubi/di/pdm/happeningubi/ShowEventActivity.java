@@ -47,8 +47,7 @@ public class ShowEventActivity extends AppCompatActivity {
     private ArrayList<Integer> imagens;
 
     String docID;
-    Long userID = 0l;
-    Object event_id;
+    Long userID = 0l, event_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +59,8 @@ public class ShowEventActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         //get_event_extras
+        Intent getid = getIntent();
+        event_id = getid.getLongExtra("event_id", -1);
 
         getEventfromDataBase();
         //

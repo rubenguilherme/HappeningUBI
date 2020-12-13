@@ -11,18 +11,33 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Map;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends Util {
 
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
+    private FirebaseFirestore db;
     private ArrayList<EventClass> events;
+    private Long userID;
+    private EventAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,16 +47,33 @@ public class ProfileActivity extends AppCompatActivity {
         setSupportActionBar(oToolBar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        db = FirebaseFirestore.getInstance();
+        userID = Long.parseLong(readUser());
+        TextView tvUsername = findViewById(R.id.profile_username);
+        db.collection("users")
+                .whereEqualTo("id", userID)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map m = document.getData();
+                                tvUsername.setText("@" + m.get("username").toString());
+                            }
+                        } else {
+                            Log.w("TAG", "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+
         //FAZ O ONCLICK DO SHOW EVENT E MANDA O NECESSARIO PARA O SHOWEVENTACTIVITY LMAO XD -> Gonçalo
+    }
 
-
-        Intent iEvents = getIntent();
-        events = (ArrayList<EventClass>) iEvents.getSerializableExtra("events");
-
-        recyclerView = findViewById(R.id.profile_recycler_view);
-        EventAdapter adapter = new EventAdapter(this, events, EventAdapter.TYPE_PROFILE);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadEvents();
     }
 
     @Override
@@ -59,6 +91,40 @@ public class ProfileActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void loadEvents() {
+        events = new ArrayList<>();
+        db.collection("Event")
+                .orderBy("event_date", Query.Direction.ASCENDING).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map m = document.getData();
+                                Timestamp t = ((Timestamp) m.get("event_date"));
+                                if ((t.getSeconds() + 86400) < Timestamp.now().getSeconds()) {
+                                    Long uid = (Long) m.get("user_id");
+                                    if (uid == Long.parseLong(readUser())) {
+                                        EventClass e = new EventClass((String) m.get("name"),
+                                                (String) m.get("description"), (String) m.get("location"),
+                                                "USER", (ArrayList<Long>) m.get("images"),
+                                                t,
+                                                (long) m.get("user_id"), (long) m.get("id"));
+                                        events.add(e);
+                                    }
+                                }
+                            }
+                            adapter = new EventAdapter(getApplicationContext(), events, EventAdapter.TYPE_PROFILE, userID);
+                            recyclerView = findViewById(R.id.profile_recycler_view);
+                            recyclerView.setAdapter(adapter);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                        } else {
+                            Log.w("TAG", "Error getting documents.", task.getException());
+                        }
+                    }
+                });
     }
 
     public void goBack(View view) {

@@ -1,17 +1,31 @@
 package pt.ubi.di.pdm.happeningubi;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Map;
 
 public class EventClass implements Serializable {
 
     private String name, description, location, user;
     private ArrayList<Long> images, going, interested;
-    private Date date;
-    private long userID, likes, dislikes, eventID;
+    private Timestamp date;
+    private long userID, eventID;
+    private FirebaseFirestore db;
 
-    public EventClass(String name, String description, String location, String user, ArrayList<Long> images, Date date, long userID) {
+    public EventClass(String name, String description, String location, String user, ArrayList<Long> images, Timestamp date, long userID, long eventID) {
         this.name = name;
         this.description = description;
         this.location = location;
@@ -19,12 +33,17 @@ public class EventClass implements Serializable {
         this.images = images;
         this.date = date;
         this.userID = userID;
+        this.eventID = eventID;
         going = new ArrayList<>();
         interested = new ArrayList<>();
     }
 
-    public EventClass() {
-        this(null,null,null,null, null, null, -1);
+    public long getEventID() {
+        return eventID;
+    }
+
+    public void setEventID(long eventID) {
+        this.eventID = eventID;
     }
 
     public String getName() {
@@ -92,14 +111,31 @@ public class EventClass implements Serializable {
     }
 
     public void addInterested(long id) {
+        db = FirebaseFirestore.getInstance();
+        db.collection("Lists")
+                .whereEqualTo("type", "interested")
+                .whereEqualTo("id", id)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map m = document.getData();
+                            }
+                        } else {
+                            Log.w("TAG", "Error getting documents.", task.getException());
+                        }
+                    }
+                });
         interested.add(id);
     }
 
-    public Date getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 
@@ -111,35 +147,4 @@ public class EventClass implements Serializable {
         this.userID = userID;
     }
 
-    public long getLikes() {
-        return likes;
-    }
-
-    public void setLikes(long likes) {
-        this.likes = likes;
-    }
-
-    public void addLike() {
-        likes++;
-    }
-
-    public void subtractLike() {
-        likes--;
-    }
-
-    public long getDislikes() {
-        return dislikes;
-    }
-
-    public void setDislikes(long dislikes) {
-        this.dislikes = dislikes;
-    }
-
-    public void addDislike() {
-        dislikes++;
-    }
-
-    public void subtractDislike() {
-        dislikes--;
-    }
 }
