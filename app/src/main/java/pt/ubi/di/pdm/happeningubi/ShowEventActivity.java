@@ -42,7 +42,7 @@ public class ShowEventActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "ShowEventActivity";
 
-    private String descricao_db,titulo,n_interessados,n_vao,horas;
+    private String descricao_db,titulo;
     private DatePicker time_stamp_data;
     private ArrayList<Integer> imagens;
 
@@ -67,8 +67,6 @@ public class ShowEventActivity extends AppCompatActivity {
         //
         Titulo = (TextView) findViewById(R.id.nome_evento_textview);
         Descricao = (TextView) findViewById(R.id.descricao_evento_textview);
-        N_VAO = (TextView) findViewById(R.id.numero_vao_evento_textview);
-        N_INTERESSADOS = (TextView) findViewById(R.id.numero_interessados_evento_textview);
         edit_descricao = (ImageView) findViewById(R.id.edit_descricao_imageview);
         Date = (TextView) findViewById(R.id.date_evento_textview);
         Horas = (TextView) findViewById(R.id.horas_evento_textview);
@@ -77,8 +75,6 @@ public class ShowEventActivity extends AppCompatActivity {
 
         //Titulo.setText(titulo);
         //Descricao.setText(descricao_db);
-        //N_VAO.setText(n_vao);
-        //N_INTERESSADOS.setText(n_interessados);
         //Date.setText(time_stamp_data)
         //Horas.setText(horas);
 

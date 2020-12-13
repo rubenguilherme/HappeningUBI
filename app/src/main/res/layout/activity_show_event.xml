@@ -50,31 +50,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/showevent_bar" />
 
-    <TextView
-        android:id="@+id/vao_evento_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="156dp"
-        android:text="@string/v_o_ao_evento"
-        android:textColor="@color/black"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imagem_anterior_imageview" />
-
-    <TextView
-        android:id="@+id/numero_vao_evento_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:fontFamily="sans-serif-light"
-        android:text="10"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toStartOf="@+id/vao_evento_textview"
-        app:layout_constraintHorizontal_bias="0.791"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imagem_anterior_imageview" />
-
     <ImageView
         android:id="@+id/imagem_anterior_imageview"
         android:layout_width="44dp"
@@ -98,28 +73,6 @@
         app:srcCompat="@drawable/arrow_android_forward" />
 
     <TextView
-        android:id="@+id/interessados_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:layout_marginEnd="24dp"
-        android:text="@string/interessados"
-        android:textColor="@color/black"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toStartOf="@+id/numero_interessados_evento_textview"
-        app:layout_constraintTop_toBottomOf="@+id/imagem_aseguir_imageview" />
-
-    <TextView
-        android:id="@+id/numero_interessados_evento_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:layout_marginEnd="112dp"
-        android:text="219"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imagem_aseguir_imageview" />
-
-    <TextView
         android:id="@+id/descricao_evento_textview"
         android:layout_width="267dp"
         android:layout_height="110dp"
@@ -127,9 +80,10 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/interessados_textview"
-        app:layout_constraintVertical_bias="0.225" />
+        app:layout_constraintTop_toBottomOf="@+id/imagem_evento_imageview"
+        app:layout_constraintVertical_bias="0.214" />
 
     <ImageView
         android:id="@+id/edit_descricao_imageview"
