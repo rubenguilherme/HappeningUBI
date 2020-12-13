@@ -73,9 +73,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     CharSequence[] languages = {"Português","English"};
 
     //id user
-    Long userID = 0l;
+    Long userID = -1l;
     //language user
-    String language;
+    String language = "";
 
 
     @Override
@@ -98,8 +98,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                             Long i = (Long)document.getData().get("id");
                             if(i.equals(userID)){
                                 docID = document.getId();
-                                language = (String) document.getData().get("language");
-                                language = Objects.requireNonNull(language).toLowerCase();
+                                language = String.valueOf(document.getData().get("language")).toLowerCase();
+                                if(language.equals(null))
+                                    language = "pt";
                             }
                         }
                     } else {
@@ -217,7 +218,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
 
             //
-            Toast.makeText(SettingsActivity.this,"Enviado com sucesso",Toast.LENGTH_SHORT).show(); //em caso de sucesso
+            Toast.makeText(SettingsActivity.this,"Funcionalidade nao implementada",Toast.LENGTH_SHORT).show(); //em caso de sucesso
 
         });
         Cancel.setOnClickListener(v -> dialog.dismiss());
@@ -238,14 +239,19 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             int selectedItem = which;
             //change language block
             switch (selectedItem){
-                case 0: setAppLocale("pt"); //set   user language on data base
+                case 0: setAppLocale("pt");
+                        db.collection("users").document(docID).update("language","PT");
                         break;
-                case 1: setAppLocale("en"); //set user language on data base
+                case 1: setAppLocale("en");
+                        db.collection("users").document(docID).update("language","EN");
                         break;
             }
-            db.collection("users").document(docID).update("language",language);
+            Log.d(TAG, "docID : " + docID);
             restart();
-            Toast.makeText(SettingsActivity.this,languages[selectedItem].toString(),Toast.LENGTH_SHORT).show();
+            if(lang == 1)
+                Toast.makeText(SettingsActivity.this,"Logout para aplicar as mudanças.",Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(SettingsActivity.this,"Logout to apply all changes",Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         });
         AlertDialog alertDialog = alertDialogBuilder.create();

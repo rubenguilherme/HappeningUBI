@@ -32,6 +32,9 @@ public class ProfileActivity extends AppCompatActivity {
         setSupportActionBar(oToolBar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        //FAZ O ONCLICK DO SHOW EVENT E MANDA O NECESSARIO PARA O SHOWEVENTACTIVITY LMAO XD -> Gonçalo
+
+
         Intent iEvents = getIntent();
         events = (ArrayList<EventClass>) iEvents.getSerializableExtra("events");
 
