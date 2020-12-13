@@ -47,6 +47,7 @@ public class LoginActivity extends Util {
     private static final String TAG = "LoginActivity";
     private Long nextID;
     private String emailS;
+    private boolean auxF = false;
 
     @Override
     protected void onStart() {
@@ -133,53 +134,72 @@ public class LoginActivity extends Util {
 
             FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-            db.collection("NextIDS")
-                    .orderBy("users", Query.Direction.DESCENDING)
+            db.collection("users")
+                    .whereEqualTo("email", email)
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(getApplicationContext(), "User created.", Toast.LENGTH_LONG).show();
                                 for (QueryDocumentSnapshot document : task.getResult()) {
-                                    nextID = (Long) document.getData().get("users");
-
-                                    Map<String, Object> user = new HashMap<>();
-                                    user.put("email", email);
-                                    user.put("id", nextID);
-                                    user.put("language", "");
-                                    user.put("name", name);
-                                    user.put("profile_pic_id", -1L);
-                                    user.put("username", username);
-
-                                    writeUser(String.valueOf(nextID));
-
-                                    // Add a new document with a generated ID
-                                    db.collection("users")
-                                            .add(user)
-                                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                @Override
-                                                public void onSuccess(DocumentReference documentReference) {
-                                                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Log.d(TAG, "Error adding document", e);
-                                                }
-                                            });
-
-                                    //update table ID
-                                    db.collection("NextIDS").document("wOf4zrNyF21HPlQiFPjJ").update("users", Long.valueOf(nextID + 1));
-
-                                    updateUI(userID, flag);
-
+                                    auxF = true;
                                 }
-                            } else {
-                                Log.w(TAG, "Error getting documents.", task.getException());
+                                    if(!auxF) {
+                                        db.collection("NextIDS")
+                                                .orderBy("users", Query.Direction.DESCENDING)
+                                                .get()
+                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                        System.out.println("f3");
+                                                        if (task.isSuccessful()) {
+                                                            Toast.makeText(getApplicationContext(), "User created.", Toast.LENGTH_LONG).show();
+                                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                                nextID = (Long) document.getData().get("users");
+
+                                                                Map<String, Object> user = new HashMap<>();
+                                                                user.put("email", email);
+                                                                user.put("id", nextID);
+                                                                user.put("language", "");
+                                                                user.put("name", name);
+                                                                user.put("profile_pic_id", -1L);
+                                                                user.put("username", username);
+
+                                                                writeUser(String.valueOf(nextID));
+
+                                                                // Add a new document with a generated ID
+                                                                db.collection("users")
+                                                                        .add(user)
+                                                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                                            @Override
+                                                                            public void onSuccess(DocumentReference documentReference) {
+                                                                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                                                            }
+                                                                        })
+                                                                        .addOnFailureListener(new OnFailureListener() {
+                                                                            @Override
+                                                                            public void onFailure(@NonNull Exception e) {
+                                                                                Log.d(TAG, "Error adding document", e);
+                                                                            }
+                                                                        });
+
+                                                                //update table ID
+                                                                db.collection("NextIDS").document("wOf4zrNyF21HPlQiFPjJ").update("users", Long.valueOf(nextID + 1));
+
+                                                                updateUI(userID, flag);
+
+                                                            }
+                                                        } else {
+                                                            Log.w(TAG, "Error getting documents.", task.getException());
+                                                        }
+                                                    }
+                                                });
+                                    }
+                                    else{
+                                        setCurrentUser(userID.getEmail(), userID, false);
+                                    }
+                                }
                             }
-                        }
                     });
         }
     }
