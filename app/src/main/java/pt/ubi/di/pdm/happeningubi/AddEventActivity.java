@@ -157,13 +157,53 @@ public class AddEventActivity extends AppCompatActivity implements TimePickerDia
                 size++;
             }
         }
-        db.collection("NextIDS").document("wOf4zrNyF21HPlQiFPjJ").update("images", img_id);
+
+        if(img_id != null)
+            db.collection("NextIDS").document("wOf4zrNyF21HPlQiFPjJ").update("images", img_id);
+
         id++;
         db.collection("NextIDS").document("wOf4zrNyF21HPlQiFPjJ").update("events", id);
         //EventClass e = new EventClass(editTName.getText().toString(),editTDesc.getText().toString(), editTLoc.getText().toString(),"USER100" , null, new Date(datePicker.getYear(),datePicker.getMonth(),datePicker.getDayOfMonth()),-1);
         //Intent result = new Intent();
         //result.putExtra("event", e);
         //setResult(RESULT_OK, result);
+
+        Map<String, Object> listG = new HashMap<>();
+        listG.put("id", (id-1));
+        listG.put("type", "going");
+        db.collection("Lists")
+                .add(listG)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("TAG", "Error adding document", e);
+                    }
+                });
+
+        Map<String, Object> listI = new HashMap<>();
+        listI.put("id", (id-1));
+        listI.put("type", "interested");
+        db.collection("Lists")
+                .add(listI)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("TAG", "Error adding document", e);
+                    }
+                });
+
         super.finish();
     }
 
