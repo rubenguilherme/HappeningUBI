@@ -117,7 +117,7 @@ public class FeedActivity extends Util {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Map m = document.getData();
                                 Timestamp t = ((Timestamp) m.get("event_date"));
-                                if ((t.getSeconds() + 86400) < Timestamp.now().getSeconds()) {
+                                if ((t.getSeconds() + 86400) > Timestamp.now().getSeconds()) {
                                     EventClass e = new EventClass((String) m.get("name"),
                                             (String) m.get("description"),(String) m.get("location"),
                                             "USER", (ArrayList<Long>) m.get("images"),

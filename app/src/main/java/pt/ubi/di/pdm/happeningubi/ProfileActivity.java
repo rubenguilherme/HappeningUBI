@@ -104,7 +104,7 @@ public class ProfileActivity extends Util {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Map m = document.getData();
                                 Timestamp t = ((Timestamp) m.get("event_date"));
-                                if ((t.getSeconds() + 86400) < Timestamp.now().getSeconds()) {
+                                if ((t.getSeconds() + 86400) > Timestamp.now().getSeconds()) {
                                     Long uid = (Long) m.get("user_id");
                                     if (uid == Long.parseLong(readUser())) {
                                         EventClass e = new EventClass((String) m.get("name"),

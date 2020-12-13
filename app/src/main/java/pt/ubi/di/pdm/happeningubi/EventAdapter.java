@@ -114,6 +114,7 @@ public class EventAdapter extends RecyclerView.Adapter<ViewHolder> {
                     context.startActivity(intent);
                 }
             });
+            //notifyDataSetChanged();
         } else if(holder instanceof ProfileViewHolder) {
             ProfileViewHolder vh = (ProfileViewHolder) holder;
             GlideApp.with(context).load(storageRef.child("userimages/" + userid + ".jpg")).error(GlideApp.with(vh.userImage).load(R.drawable.account_default_icon)).into(vh.userImage);
