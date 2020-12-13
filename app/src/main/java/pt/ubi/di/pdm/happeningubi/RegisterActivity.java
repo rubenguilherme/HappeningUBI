@@ -50,7 +50,10 @@ public class RegisterActivity extends Util {
     EditText mNome, mUser, mEmail, mPassword, mPassConfirm;
     FirebaseAuth fAuth;
     Long nextID;
-
+    Uri photo;
+    boolean existFile = false;
+    private static final int IMAGE_PICK_CODE = 1000;
+    private static final int PERMISSION_CODE = 1001;
     private static final String TAG = "RegisterActivity";
 
 
@@ -120,7 +123,6 @@ public class RegisterActivity extends Util {
                                                                 user.put("id", nextID);
                                                                 user.put("language", "");
                                                                 user.put("name", name);
-                                                                user.put("profile_pic_id", -1L);
                                                                 user.put("username", username);
 
                                                                 writeUser(String.valueOf(nextID));
@@ -140,7 +142,12 @@ public class RegisterActivity extends Util {
                                                                                 Log.d(TAG, "Error adding document", e);
                                                                             }
                                                                         });
-
+                                                                if (existFile) {
+                                                                        FirebaseStorage storage = FirebaseStorage.getInstance();
+                                                                        StorageReference storageRef = storage.getReference();
+                                                                        StorageReference imagesRef = storageRef.child("userimages/" + readUser() + ".jpg");
+                                                                        UploadTask uploadTask = imagesRef.putFile(photo);
+                                                                }
                                                                 //update table ID
                                                                 db.collection("NextIDS").document("wOf4zrNyF21HPlQiFPjJ").update("users", Long.valueOf(nextID + 1));
 
@@ -173,5 +180,42 @@ public class RegisterActivity extends Util {
     }
 
     public void addPic(View view) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
+                requestPermissions(permissions, PERMISSION_CODE);
+            }
+            else {
+                pickImageFromGallery();
+            }
+        }
+        else {}
+    }
+
+    public void pickImageFromGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(intent, IMAGE_PICK_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE) {
+            photo = data.getData();
+            existFile = true;
+            }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    pickImageFromGallery();
+                }
+                else {
+                    Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show();
+                }
+        }
     }
 }
