@@ -47,7 +47,7 @@ public class ShowEventActivity extends AppCompatActivity {
     private ArrayList<Integer> imagens;
 
     String docID;
-    Long userID = 0l, event_id;
+    EventClass event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +59,11 @@ public class ShowEventActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         //get_event_extras
-        Intent getid = getIntent();
-        event_id = getid.getLongExtra("event_id", -1);
+        Intent getEvent = getIntent();
+        event = (EventClass) getEvent.getSerializableExtra("event");
 
-        getEventfromDataBase();
+        Log.d(TAG, event.toString());
+
         //
         Titulo = (TextView) findViewById(R.id.nome_evento_textview);
         Descricao = (TextView) findViewById(R.id.descricao_evento_textview);
@@ -83,6 +84,9 @@ public class ShowEventActivity extends AppCompatActivity {
 
         //clicar next and before to change event image
 
+
+        //
+
     }
     private void createPopup(){
         dialogbuilder = new AlertDialog.Builder(this);
@@ -101,34 +105,6 @@ public class ShowEventActivity extends AppCompatActivity {
         });
         Cancelar.setOnClickListener(v -> dialog.dismiss());
 
-    }
-    public void getEventfromDataBase(){
-
-        Task<QuerySnapshot> users = db.collection("Event")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-
-                            Long i = (Long)document.getData().get("id");
-                            if(i.equals(""/*event_id*/)){
-                               docID = document.getId();
-                               titulo = (String) document.getData().get("name");
-                               descricao_db = (String) document.getData().get("description");
-                               //n_interessados = (String) document.getData().get()
-                               //n_vao = (String) document.getData().get()
-                               imagens = new ArrayList<>();
-                               imagens = (ArrayList<Integer>) document.getData().get("images");
-                               time_stamp_data = (DatePicker) document.getData().get("event_date");
-                               //horas = (String) document.getData().get("");
-
-
-                            }
-                        }
-                    } else {
-                        Log.w(TAG, "Error getting documents.", task.getException());
-                    }
-                });
     }
     private void restart(){
         Intent intent = new Intent(ShowEventActivity.this,ShowEventActivity.class);

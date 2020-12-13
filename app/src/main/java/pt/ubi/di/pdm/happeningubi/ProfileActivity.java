@@ -66,8 +66,6 @@ public class ProfileActivity extends Util {
                         }
                     }
                 });
-
-        //FAZ O ONCLICK DO SHOW EVENT E MANDA O NECESSARIO PARA O SHOWEVENTACTIVITY LMAO XD -> Gonçalo
     }
 
     @Override

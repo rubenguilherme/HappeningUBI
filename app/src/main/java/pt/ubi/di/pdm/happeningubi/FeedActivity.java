@@ -52,7 +52,6 @@ public class FeedActivity extends Util {
 
         db = FirebaseFirestore.getInstance();
         userID = Long.parseLong(readUser());
-        //setAppLocale("applanguage"); Gonçalo -> Mudar Idioma -> NAO APAGAR
 
         /* Quando user der login , saber a language a partir da database e mudar o idioma para todas as activities
          */

@@ -27,9 +27,9 @@
         android:id="@+id/conta_settings_textview"
         android:layout_width="match_parent"
         android:layout_height="25dp"
-        android:background="#E3E3E3"
         android:text="@string/a_minha_conta"
-        android:textColor="#4CAF50"
+        android:textColor="@color/ubi_blue"
+        android:fontFamily="sans-serif-black"
         android:textSize="16sp"/>
 
     <ScrollView
@@ -99,10 +99,10 @@
             <TextView
                 android:id="@+id/problema_settings_textview"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#E3E3E3"
+                android:layout_height="25dp"
                 android:text="@string/feedback"
-                android:textColor="#4CAF50"
+                android:textColor="@color/ubi_blue"
+                android:fontFamily="sans-serif-black"
                 android:textSize="16sp" />
 
             <View
