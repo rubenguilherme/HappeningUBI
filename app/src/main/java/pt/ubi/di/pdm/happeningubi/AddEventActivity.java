@@ -53,7 +53,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class AddEventActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
+public class AddEventActivity extends Util implements TimePickerDialog.OnTimeSetListener {
 
     public static Long id;
     public static Long img_id;
@@ -133,7 +133,7 @@ public class AddEventActivity extends AppCompatActivity implements TimePickerDia
         //Calendar calendar = new GregorianCalendar(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), hour, minute);
         event.put("event_date", new Timestamp(new Date((datePicker.getYear() - 1900), datePicker.getMonth(), datePicker.getDayOfMonth(), hour, minute)));
         event.put("id", id);
-        event.put("user_id", -1);
+        event.put("user_id", Long.parseLong(readUser()));
         event.put("images", id_files);
         db.collection("Event")
                 .add(event)
