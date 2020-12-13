@@ -45,9 +45,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TAG = "SettingsActivity";
     TextView Language,Change_Foto,Report_Problem,Connect_Google,Connect_Facebook,LogOut;
 
     private EditText Subject_Problem,Description_Problem;
@@ -62,10 +66,16 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private ImageView Back;
 
     private FirebaseAuth mAuth;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private boolean isRefreshing = true;
-
+    private String docID;
     CharSequence[] languages = {"Português","English"};
+
+    //id user
+    Long userID = -1l;
+    //language user
+    String language = "";
 
 
     @Override
@@ -78,6 +88,27 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
         mAuth = FirebaseAuth.getInstance();
+
+        db.collection("users")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+
+                            Long i = (Long)document.getData().get("id");
+                            if(i.equals(userID)){
+                                docID = document.getId();
+                                language = String.valueOf(document.getData().get("language")).toLowerCase();
+                                if(language.equals(null))
+                                    language = "pt";
+                            }
+                        }
+                    } else {
+                        Log.w(TAG,"Error getting documents",task.getException());
+                    }
+                });
+
+
         btnGoogle = findViewById(R.id.sign_in_button_settings);
         Back = (ImageView) findViewById(R.id.settings_back);
         Language = (TextView) findViewById(R.id.mudar_idioma_definicoes_textview);
@@ -122,8 +153,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 Toast.makeText(SettingsActivity.this, "Logout", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.settings_back:
-                Intent back = new Intent(SettingsActivity.this, ProfileActivity.class);
-                startActivity(back);
                 finish();
                 break;
         }
@@ -189,29 +218,40 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
 
             //
-            Toast.makeText(SettingsActivity.this,"Enviado com sucesso",Toast.LENGTH_SHORT).show(); //em caso de sucesso
+            Toast.makeText(SettingsActivity.this,"Funcionalidade nao implementada",Toast.LENGTH_SHORT).show(); //em caso de sucesso
 
         });
         Cancel.setOnClickListener(v -> dialog.dismiss());
     }
     private void createPopUp(){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SettingsActivity.this);
-        //if(Ingles == 1)
+        int lang;
+        if(language.equals("en")){
             alertDialogBuilder.setTitle("Select Language");
-        //else
-        //  alertDialogBuilder.setTitle("Seleciona a Linguagem");
+            lang = 1;
+        }
+        else{
+            alertDialogBuilder.setTitle("Seleciona a Linguagem");
+            lang = 0;
+        }
         alertDialogBuilder.setCancelable(true);
-        // 0 = first element -> default _ mudar para a linguagem do user
-        alertDialogBuilder.setSingleChoiceItems(languages, 0, (dialog, which) -> {
+        alertDialogBuilder.setSingleChoiceItems(languages, lang, (dialog, which) -> {
             int selectedItem = which;
             //change language block
             switch (selectedItem){
-                case 0: setAppLocale("pt"); break;
-                case 1: setAppLocale("en"); break;
+                case 0: setAppLocale("pt");
+                        db.collection("users").document(docID).update("language","PT");
+                        break;
+                case 1: setAppLocale("en");
+                        db.collection("users").document(docID).update("language","EN");
+                        break;
             }
+            Log.d(TAG, "docID : " + docID);
             restart();
-            //
-            Toast.makeText(SettingsActivity.this,languages[selectedItem].toString(),Toast.LENGTH_SHORT).show();
+            if(lang == 1)
+                Toast.makeText(SettingsActivity.this,"Logout para aplicar as mudanças.",Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(SettingsActivity.this,"Logout to apply all changes",Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         });
         AlertDialog alertDialog = alertDialogBuilder.create();
@@ -236,10 +276,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void goToChangeProfile(View v){
-
-        Intent intent = new Intent(this, EditProfileActivity.class);
+        Intent intent = new Intent(this,EditProfileActivity.class);
         startActivity(intent);
-
     }
-
 }

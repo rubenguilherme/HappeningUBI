@@ -101,7 +101,6 @@ public class AddEventActivity extends AppCompatActivity implements TimePickerDia
                 });
 
         //ivImage = findViewById(R.id.ivImage);
-        //setAppLocale("applanguage"); Gonçalo -> Mudar Idioma -> NAO APAGAR
 
     }
 
@@ -225,14 +224,6 @@ public class AddEventActivity extends AppCompatActivity implements TimePickerDia
     public void showTimePickerDialog(View v) {
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(getSupportFragmentManager(), "timePicker");
-    }
-
-    private void setAppLocale(String localeCode){ //Gonçalo -> Mudar Idioma -> NAO APAGAR
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.setLocale(new Locale(localeCode.toLowerCase()));
-        res.updateConfiguration(conf,dm);
     }
 
     @Override

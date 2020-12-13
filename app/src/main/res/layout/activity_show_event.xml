@@ -7,23 +7,22 @@
     tools:context=".ShowEventActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/feed_bar"
+        android:id="@+id/showevent_bar"
         android:layout_width="match_parent"
-        android:layout_height="59dp"
-        android:background="@color/white"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:backgroundTint="@color/corUBI"
         android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/bar_feed"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:layout_width="200dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/happ2" />
+        <ImageButton
+            android:id="@+id/showevent_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@drawable/back_white" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -49,7 +48,7 @@
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/feed_bar" />
+        app:layout_constraintTop_toBottomOf="@+id/showevent_bar" />
 
     <TextView
         android:id="@+id/vao_evento_textview"
@@ -141,6 +140,30 @@
         app:layout_constraintHorizontal_bias="0.367"
         app:layout_constraintStart_toEndOf="@+id/descricao_evento_textview"
         app:srcCompat="@drawable/edit_pen" />
+
+    <TextView
+        android:id="@+id/date_evento_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="16/12/2020"
+        android:textSize="35sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/descricao_evento_textview" />
+
+    <TextView
+        android:id="@+id/horas_evento_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="11:00"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date_evento_textview" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
