@@ -307,7 +307,6 @@ public class AddEventActivity extends Util implements TimePickerDialog.OnTimeSet
                 id_files.add(img_id);
                 img_id++;
                 flag++;
-                //ivImage.setImageURI(img);
             }
             if(language.equals("pt"))
                 Toast.makeText(AddEventActivity.this,"Foto adicionada com sucesso",Toast.LENGTH_SHORT).show();

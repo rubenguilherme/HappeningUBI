@@ -67,7 +67,7 @@
             <TextView
                 android:id="@+id/descricao_evento_textview"
                 android:layout_width="267dp"
-                android:layout_height="110dp"
+                android:layout_height="wrap_content"
                 android:text="@string/descri_o_do_evento"
                 android:textSize="18sp"
                 android:layout_marginTop="15dp"
@@ -81,11 +81,11 @@
                 android:id="@+id/date_evento_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
                 android:text="16/12/2020"
-                android:textSize="35sp"
+                android:textSize="24sp"
+                android:layout_marginTop="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintHorizontal_bias="0.75"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/descricao_evento_textview" />
 
@@ -93,11 +93,23 @@
                 android:id="@+id/horas_evento_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:text="11:00"
                 android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="@+id/date_evento_textview"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintHorizontal_bias="0.25"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/date_evento_textview" />
+
+            <TextView
+                android:id="@+id/localizaca_evento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="__"
+                android:textSize="24sp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/date_evento_textview" />
         </androidx.constraintlayout.widget.ConstraintLayout>

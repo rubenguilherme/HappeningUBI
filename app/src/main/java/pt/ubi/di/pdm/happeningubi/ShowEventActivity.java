@@ -32,7 +32,7 @@ public class ShowEventActivity extends Util {
     private ImageView imagem_evento,showevent_Back;
     private AlertDialog.Builder dialogbuilder;
     private AlertDialog dialog;
-    private TextView Descricao,Titulo,Date,Horas;
+    private TextView Descricao,Titulo,Date,Horas, Local;
     private StorageReference storageRef;
     private static final String TAG = "ShowEventActivity";
 
@@ -62,6 +62,7 @@ public class ShowEventActivity extends Util {
         Descricao = (TextView) findViewById(R.id.descricao_evento_textview);
         Date = (TextView) findViewById(R.id.date_evento_textview);
         Horas = (TextView) findViewById(R.id.horas_evento_textview);
+        Local = (TextView) findViewById(R.id.localizaca_evento);
         imagem_evento = (ImageView) findViewById(R.id.imagem_evento_imageview);
         showevent_Back = (ImageView) findViewById(R.id.showevent_back);
         showevent_Back.setOnClickListener(v -> finish());
@@ -70,15 +71,15 @@ public class ShowEventActivity extends Util {
         Descricao.setText(descricao);
         Date.setText(time_stamp_data);
         Horas.setText(horas);
+        Local.setText(localizacao);
 
         //clicar next and before to change event image
         if (event.getImages().size() > 0) {
             GlideApp.with(this).load(storageRef.child("images/" + event.getImages().get(0) + ".jpg")).into(imagem_evento);
         }
         else imagem_evento.setVisibility(View.GONE);
-        //
-
     }
+
     private void getEventDetails(EventClass event){
         titulo = event.getName();
         descricao = event.getDescription();
