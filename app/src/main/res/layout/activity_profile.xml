@@ -30,7 +30,7 @@
             android:layout_marginLeft="40dp"
             android:text="\@username"
             android:textSize="25sp"
-            android:textColor="?attr/colorOnPrimarySurface"
+            android:textColor="@color/white"
             android:gravity="center"/>
 
     </androidx.appcompat.widget.Toolbar>

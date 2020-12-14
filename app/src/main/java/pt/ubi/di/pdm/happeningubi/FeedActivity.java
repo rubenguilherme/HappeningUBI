@@ -34,7 +34,7 @@ public class FeedActivity extends Util {
     private EventAdapter adapter;
     private FirebaseFirestore db;
     private static boolean restarted = true;
-    String language_user = "";
+    String language_user = "", username;
     Long userID;
     String docID;
     private static final String TAG = "FeedActivity";
@@ -103,6 +103,7 @@ public class FeedActivity extends Util {
     }
 
     private void loadEvents() {
+
         events = new ArrayList<>();
         db.collection("Event")
             .orderBy("event_date", Query.Direction.ASCENDING).get()
@@ -112,15 +113,37 @@ public class FeedActivity extends Util {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Map m = document.getData();
+                                Long user_id = (long) m.get("user_id"), id = (long) m.get("id");
                                 Timestamp t = ((Timestamp) m.get("event_date"));
-                                if ((t.getSeconds() + 86400) > Timestamp.now().getSeconds()) {
-                                    EventClass e = new EventClass((String) m.get("name"),
-                                            (String) m.get("description"),(String) m.get("location"),
-                                            "USER", (ArrayList<Long>) m.get("images"),
-                                            t.toDate(),
-                                            (long) m.get("user_id"), (long) m.get("id"));
-                                    events.add(e);
-                                }
+                                String name = (String) m.get("name"), desc = (String) m.get("description");
+                                ArrayList<Long> images = (ArrayList<Long>) m.get("images");
+                                db.collection("users")
+                                        .whereEqualTo("id", user_id)
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                                        Map m = document.getData();
+                                                        username =  m.get("username").toString();
+                                                        if ((t.getSeconds() + 86400) > Timestamp.now().getSeconds()) {
+
+                                                            EventClass e = new EventClass(name,
+                                                                    desc,(String) m.get("location"),
+                                                                    username, images,
+                                                                    t.toDate(), user_id
+                                                                    , id);
+                                                            events.add(e);
+                                                            adapter.notifyDataSetChanged();
+                                                        }
+                                                    }
+                                                } else {
+                                                    Log.w("TAG", "Error getting documents.", task.getException());
+                                                }
+                                            }
+                                        });
+
                             }
                             recyclerView = findViewById(R.id.feed_recyclerView);
                             adapter = new EventAdapter(FeedActivity.this,events, EventAdapter.TYPE_FEED, userID);

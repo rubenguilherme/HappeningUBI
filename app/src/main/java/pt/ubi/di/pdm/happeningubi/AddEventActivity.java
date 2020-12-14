@@ -262,6 +262,25 @@ public class AddEventActivity extends Util implements TimePickerDialog.OnTimeSet
                 pickImageFromGallery();
             }
         }
+        else {
+            db.collection("NextIDS")
+                    .orderBy("images", Query.Direction.DESCENDING)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    img_id = (Long) document.getData().get("images") + flag;
+                                    break;
+                                }
+                            } else {
+                                Log.w("TAG", "Error getting documents.", task.getException());
+                            }
+                        }
+                    });
+            pickImageFromGallery();
+        }
     }
 
     private void pickImageFromGallery() {
