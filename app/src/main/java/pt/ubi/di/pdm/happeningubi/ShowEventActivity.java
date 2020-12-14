@@ -37,9 +37,8 @@ public class ShowEventActivity extends Util {
     private static final String TAG = "ShowEventActivity";
 
     private String descricao,titulo,localizacao,horas,time_stamp_data;
-    private ArrayList<Long> imagens;
+    private ArrayList<Long> imagens = new ArrayList<>();
 
-    String docID;
     EventClass event;
 
     @Override
@@ -52,7 +51,7 @@ public class ShowEventActivity extends Util {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         storageRef = FirebaseStorage.getInstance().getReference();
-        //get_event_extras
+        //get_event_extras0
         Intent getEvent = getIntent();
         event = (EventClass) getEvent.getSerializableExtra("event");
         getEventDetails(event);
@@ -64,7 +63,13 @@ public class ShowEventActivity extends Util {
         Date = (TextView) findViewById(R.id.date_evento_textview);
         Horas = (TextView) findViewById(R.id.horas_evento_textview);
         imagem_evento = (ImageView) findViewById(R.id.imagem_evento_imageview);
-
+        showevent_Back = (ImageView) findViewById(R.id.showevent_back);
+        showevent_Back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         Titulo.setText(titulo);
         Descricao.setText(descricao);

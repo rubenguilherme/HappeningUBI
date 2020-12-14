@@ -58,6 +58,7 @@ public class AddEventActivity extends Util implements TimePickerDialog.OnTimeSet
 
     public static Long id;
     public static Long img_id;
+    private static final String TAG = "AddEventActivity";
 
     EditText editTName, editTDesc, editTLoc;
     DatePicker datePicker;
@@ -70,6 +71,8 @@ public class AddEventActivity extends Util implements TimePickerDialog.OnTimeSet
     ArrayList<Uri> files = new ArrayList<>();
     ArrayList<Long> id_files = new ArrayList<>();
     boolean existFile = false;
+    Long userID;
+    String language = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +81,8 @@ public class AddEventActivity extends Util implements TimePickerDialog.OnTimeSet
         Toolbar oToolBar = (Toolbar) findViewById(R.id.feed_bar);
         setSupportActionBar(oToolBar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        userID = Long.parseLong(readUser());
 
         editTName = findViewById(R.id.addevent_name);
         editTDesc = findViewById(R.id.addevent_desc);
@@ -98,6 +103,24 @@ public class AddEventActivity extends Util implements TimePickerDialog.OnTimeSet
                         } else {
                             Log.w("TAG", "Error getting documents.", task.getException());
                         }
+                    }
+                });
+        db.collection("users")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+
+                            Long i = (Long)document.getData().get("id");
+                            if(i.equals(userID)){
+                                language = String.valueOf(document.getData().get("language")).toLowerCase();
+                                if(language.equals(""))
+                                    language = "pt";
+                                setAppLocale(language);
+                            }
+                        }
+                    } else {
+                        Log.w(TAG,"Error getting documents",task.getException());
                     }
                 });
 
@@ -267,6 +290,10 @@ public class AddEventActivity extends Util implements TimePickerDialog.OnTimeSet
                 flag++;
                 //ivImage.setImageURI(img);
             }
+            if(language.equals("pt"))
+                Toast.makeText(AddEventActivity.this,"Foto adicionada com sucesso",Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(AddEventActivity.this,"Photo added with sucess",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -292,5 +319,12 @@ public class AddEventActivity extends Util implements TimePickerDialog.OnTimeSet
                     Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show();
                 }
         }
+    }
+    private void setAppLocale(String localeCode){
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.setLocale(new Locale(localeCode.toLowerCase()));
+        res.updateConfiguration(conf,dm);
     }
 }

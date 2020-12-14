@@ -43,17 +43,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.google.android.gms.common.SignInButton
-                android:id="@+id/sign_in_button_settings"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray" />
-
             <TextView
                 android:id="@+id/edit_profile"
                 android:layout_width="match_parent"
