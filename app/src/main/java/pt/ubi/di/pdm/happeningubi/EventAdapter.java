@@ -72,7 +72,7 @@ public class EventAdapter extends RecyclerView.Adapter<ViewHolder> {
         if(holder instanceof EventViewHolder) {
             EventViewHolder vh = (EventViewHolder) holder;
             EventClass e = events.get(position - ((type == TYPE_PROFILE) ? 1 : 0));
-            vh.userImage.setImageResource(R.drawable.account_default_icon);
+            GlideApp.with(context).load(storageRef.child("userimages/" + e.getUserID() + ".jpg")).error(GlideApp.with(vh.userImage).load(R.drawable.account_default_icon)).into(vh.userImage);
             vh.userName.setText(e.getUser());
             vh.eventName.setText(e.getName());
             vh.eventDesc.setText(e.getDescription());
