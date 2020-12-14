@@ -115,7 +115,7 @@ public class FeedActivity extends Util {
                                 Map m = document.getData();
                                 Long user_id = (long) m.get("user_id"), id = (long) m.get("id");
                                 Timestamp t = ((Timestamp) m.get("event_date"));
-                                String name = (String) m.get("name"), desc = (String) m.get("description");
+                                String name = (String) m.get("name"), desc = (String) m.get("description"), loc = (String) m.get("location");
                                 ArrayList<Long> images = (ArrayList<Long>) m.get("images");
                                 db.collection("users")
                                         .whereEqualTo("id", user_id)
@@ -130,7 +130,7 @@ public class FeedActivity extends Util {
                                                         if ((t.getSeconds() + 86400) > Timestamp.now().getSeconds()) {
 
                                                             EventClass e = new EventClass(name,
-                                                                    desc,(String) m.get("location"),
+                                                                    desc, loc,
                                                                     username, images,
                                                                     t.toDate(), user_id
                                                                     , id);

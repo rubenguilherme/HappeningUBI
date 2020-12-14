@@ -6,19 +6,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -27,7 +24,6 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -63,7 +59,7 @@ public class EventAdapter extends RecyclerView.Adapter<ViewHolder> {
         }
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        view = inflater.inflate(R.layout.event_viewholder, parent, false);
+        view = inflater.inflate(R.layout.viewholder_event, parent, false);
         return new EventViewHolder(view);
     }
 

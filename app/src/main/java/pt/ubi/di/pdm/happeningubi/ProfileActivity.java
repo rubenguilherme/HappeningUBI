@@ -32,6 +32,7 @@ public class ProfileActivity extends Util {
     private ArrayList<EventClass> events;
     private Long userID;
     private EventAdapter adapter;
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,8 @@ public class ProfileActivity extends Util {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Map m = document.getData();
-                                tvUsername.setText("@" + m.get("username").toString());
+                                username = m.get("username").toString();
+                                tvUsername.setText("@" + username);
                             }
                         } else {
                             Log.w("TAG", "Error getting documents.", task.getException());
@@ -101,7 +103,7 @@ public class ProfileActivity extends Util {
                                     if (uid == Long.parseLong(readUser())) {
                                         EventClass e = new EventClass((String) m.get("name"),
                                                 (String) m.get("description"), (String) m.get("location"),
-                                                "USER", (ArrayList<Long>) m.get("images"),
+                                                username, (ArrayList<Long>) m.get("images"),
                                                 t.toDate(),
                                                 (long) m.get("user_id"), (long) m.get("id"));
                                         events.add(e);
