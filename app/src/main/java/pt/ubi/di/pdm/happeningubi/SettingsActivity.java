@@ -11,8 +11,6 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,10 +26,8 @@ public class SettingsActivity extends Util implements View.OnClickListener {
     private static final String TAG = "SettingsActivity";
     TextView Language,Report_Problem,LogOut;
 
-    private EditText Subject_Problem,Description_Problem;
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
-    private Button Send,Cancel;
             //google
     private static int RC_SIGN_IN = 101;
 
@@ -84,10 +80,8 @@ public class SettingsActivity extends Util implements View.OnClickListener {
 
         Back = (ImageView) findViewById(R.id.settings_back);
         Language = (TextView) findViewById(R.id.mudar_idioma_definicoes_textview);
-        Report_Problem = (TextView) findViewById(R.id.reportar_problema_definicoes_textview);
         LogOut = (TextView) findViewById(R.id.log_out_definicoes_textview);
 
-        Report_Problem.setOnClickListener(this);
         LogOut.setOnClickListener(this);
         Language.setOnClickListener(this);
         Back.setOnClickListener(this);
@@ -99,9 +93,6 @@ public class SettingsActivity extends Util implements View.OnClickListener {
     public void onClick(View v) {
 
         switch (v.getId()) {
-            case R.id.reportar_problema_definicoes_textview: //popup com "assunto" e "mensagem"
-                createReport();
-                break;
             case R.id.mudar_idioma_definicoes_textview: // mudar as strings
                 isRefreshing = true;
                 createPopUp();
@@ -121,34 +112,6 @@ public class SettingsActivity extends Util implements View.OnClickListener {
 
     }
 
-    private void createReport(){ //nao implementada
-        dialogBuilder = new AlertDialog.Builder(this);
-        final View ReportPopupView = getLayoutInflater().inflate(R.layout.popup_reportproblem,null);
-        Subject_Problem = (EditText) ReportPopupView.findViewById(R.id.assunto_report_edittext);
-        Description_Problem = (EditText) ReportPopupView.findViewById(R.id.descricao_report_edittext);
-        Send = (Button) ReportPopupView.findViewById(R.id.enviar_report_button);
-        Cancel = (Button) ReportPopupView.findViewById(R.id.cancelar_report_button);
-
-        dialogBuilder.setView(ReportPopupView);
-        dialog = dialogBuilder.create();
-        dialog.show();
-        Send.setOnClickListener(v -> {
-
-            String Subject,Description;
-            Subject = Subject_Problem.getText().toString();
-            Description = Description_Problem.getText().toString();
-
-            //Saber o nome do utilizador que deu o feedback?
-
-            //inserir base de dados
-
-
-            //
-            Toast.makeText(SettingsActivity.this,"Funcionalidade nao implementada",Toast.LENGTH_SHORT).show(); //em caso de sucesso
-
-        });
-        Cancel.setOnClickListener(v -> dialog.dismiss());
-    }
     private void createPopUp(){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SettingsActivity.this);
         int lang;

@@ -85,15 +85,6 @@
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/problema_settings_textview"
-                android:layout_width="match_parent"
-                android:layout_height="25dp"
-                android:text="@string/feedback"
-                android:textColor="@color/ubi_blue"
-                android:fontFamily="sans-serif-black"
-                android:textSize="16sp" />
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -102,34 +93,6 @@
         </LinearLayout>
     </ScrollView>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/reportar_problema_definicoes_textview"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="5dp"
-                android:text="@string/reportar_um_problema"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray" />
-
-
-        </LinearLayout>
-    </ScrollView>
 
 </LinearLayout>

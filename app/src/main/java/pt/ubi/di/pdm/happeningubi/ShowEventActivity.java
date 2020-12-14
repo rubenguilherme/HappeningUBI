@@ -64,12 +64,7 @@ public class ShowEventActivity extends Util {
         Horas = (TextView) findViewById(R.id.horas_evento_textview);
         imagem_evento = (ImageView) findViewById(R.id.imagem_evento_imageview);
         showevent_Back = (ImageView) findViewById(R.id.showevent_back);
-        showevent_Back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        showevent_Back.setOnClickListener(v -> finish());
 
         Titulo.setText(titulo);
         Descricao.setText(descricao);
@@ -80,6 +75,7 @@ public class ShowEventActivity extends Util {
         if (event.getImages().size() > 0) {
             GlideApp.with(this).load(storageRef.child("images/" + event.getImages().get(0) + ".jpg")).into(imagem_evento);
         }
+        else imagem_evento.setVisibility(View.GONE);
         //
 
     }
