@@ -50,28 +50,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/showevent_bar" />
 
-    <ImageView
-        android:id="@+id/imagem_anterior_imageview"
-        android:layout_width="44dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.076"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imagem_evento_imageview"
-        app:srcCompat="@drawable/arrow_android_back" />
-
-    <ImageView
-        android:id="@+id/imagem_aseguir_imageview"
-        android:layout_width="44dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.92"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imagem_evento_imageview"
-        app:srcCompat="@drawable/arrow_android_forward" />
-
     <TextView
         android:id="@+id/descricao_evento_textview"
         android:layout_width="267dp"
