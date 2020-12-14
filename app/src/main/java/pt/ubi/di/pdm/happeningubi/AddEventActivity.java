@@ -8,6 +8,7 @@ import androidx.fragment.app.DialogFragment;
 
 import android.Manifest;
 import android.app.TimePickerDialog;
+import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -252,8 +253,15 @@ public class AddEventActivity extends Util implements TimePickerDialog.OnTimeSet
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        int count;
         if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE) {
-            int count = data.getClipData().getItemCount(); //evaluate the count before the for loop --- otherwise, the count is evaluated every loop.
+            ClipData aux = data.getClipData();
+            if(aux == null){
+                count = 1;
+            }
+            else{
+                count = aux.getItemCount();
+            }
             for(int i = 0; i < count; i++) {
                 files.add(data.getData());
                 existFile = true;
