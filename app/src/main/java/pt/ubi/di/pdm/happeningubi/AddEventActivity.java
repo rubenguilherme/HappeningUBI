@@ -238,9 +238,6 @@ public class AddEventActivity extends Util implements TimePickerDialog.OnTimeSet
                 pickImageFromGallery();
             }
         }
-        else {
-
-        }
     }
 
     private void pickImageFromGallery() {
